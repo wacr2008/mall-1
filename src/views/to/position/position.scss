@@ -1,0 +1,58 @@
+.position{
+  &-header{
+    height:0.8rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.1rem;
+    margin-top: 0.1rem;
+
+    &-back{
+      height:0.8rem;
+      width: 0.9rem;
+      border:none;
+
+      &-img{
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+      }
+    }
+
+    &-search{
+      height:0.7rem;
+      width: 85%;
+      padding:0;
+
+      .van-search__content{
+        background-color: #fff;
+        border:1px solid #D7D7D7;
+      }
+
+      .van-search__action{
+        margin-left:0.1rem;
+      }
+    }
+  }
+
+  &-now{
+    height:0.8rem;
+    padding:0.2rem 0.3rem;
+    font-size: initial;
+  }
+
+  .header-hot-example{
+    display: flex;
+    flex-wrap:wrap;
+    width: calc(100% - 0.6rem);
+    justify-content: center;
+
+    &-item{
+      width:1rem;
+      height:0.5rem;
+      line-height: 0.5rem;
+      background-color:#F1F1F1;
+      text-align: center;
+      margin:0.1rem;
+    }
+  }
+}

@@ -25,7 +25,7 @@
         <div class="allCustom-contain-item-smallItem">
           <div
             class="allCustom-contain-item-smallItem-img van-hairline--surround"
-            v-for="(sImg,index1) in smallImg"
+            v-for="(sImg, index1) in smallImg"
             :key="index1"
             v-lazy="sImg"
           >

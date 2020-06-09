@@ -5,7 +5,9 @@
         <img :src="title[0]" alt="err" />
       </div>
       <div class="theme-recommend-title-text">{{ title[1] }}</div>
-      <van-button type="default" class="theme-recommend-title-btn">全部 ></van-button>
+      <van-button type="default" class="theme-recommend-title-btn">
+        全部 >
+      </van-button>
     </div>
     <div class="theme-recommend-contain">
       <div

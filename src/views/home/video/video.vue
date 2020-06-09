@@ -9,7 +9,7 @@
     </div>
     <div class="video-contain">
       <van-grid :column-num="2" :border="false">
-        <van-grid-item v-for="(img, index) in videoImg" :key="index">
+        <van-grid-item v-for="(img, index) in videoImg" :key="index" v-lazy="img">
           <van-image lazy-load :src="img" />
           <div class="video-contain-title">
             {{videoTitle[index]}}

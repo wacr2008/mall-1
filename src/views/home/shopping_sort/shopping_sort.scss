@@ -1,0 +1,61 @@
+.shoppingSort-contain{
+  &-item{
+    text-align: center;
+
+    &-poster{
+      &-title{
+        margin:0.1rem 0;
+        font-size: large;
+        font-weight: 600;
+      }
+
+      &-img{
+        width:80%;
+        height:3rem;
+        margin:auto;
+
+        img{
+          height: 100%;
+          width: 100%;
+          object-fit: contain;
+        }
+      }
+
+      &-name{
+        font-size: larger;
+      }
+
+      &-price{
+        font-size: larger;
+        color:red;
+        margin:0.1rem auto;
+      }
+    }
+
+    .van-grid{
+      &-item {
+        height:2.5rem;
+
+        .shoppingSort-contain-item-other-img{
+          height:1.5rem;
+          width:80%;
+
+          img{
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+          }
+        }
+
+        .shoppingSort-contain-item-other-price{
+          color:red;
+        }
+      }
+    }
+    .van-button{
+      margin:0.2rem 0;
+      height:0.8rem;
+      width: 2rem;
+    }
+  }
+}
