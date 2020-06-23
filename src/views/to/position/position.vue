@@ -12,10 +12,9 @@
         class="position-header-search"
         left-icon=""
         show-action
-        @search="onSearch"
       >
         <template #action>
-          <div @click="onSearch">搜索</div>
+          <div>搜索</div>
         </template>
       </van-search>
     </header>
@@ -52,6 +51,7 @@
 export default {
   data() {
     return {
+      value: "",
       name: "position",
       nowCity: "杭州市",
       indexList: [
@@ -100,7 +100,6 @@ export default {
   methods: {
     changeNowCity(name) {
       this.nowCity = name;
-      console.log(this.nowCity);
     }
   }
 };

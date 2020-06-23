@@ -1,0 +1,41 @@
+.parameter{
+  .van-tabs__content{
+    .van-tab__pane{
+      background-color: #fff;
+
+      .parameter-img{
+        background-color: #F9F9F9 ;
+        padding: 0 0.2rem;
+        &-item{
+          width: 100%;
+
+          img{
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+          }
+        }
+      }
+
+      .shopping-parameter{
+        &-item{
+          height: 0.8rem;
+          border-bottom: 1px solid #E4E4E4;
+          line-height: 0.8rem;
+          display: flex;
+          font-size: initial;
+          color: #9C9C9C;
+
+          .category{
+            margin-left: 0.3rem;
+            width: 25%;
+          }
+
+          .contain{
+            margin-left: 0.5rem;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,49 @@
+.bottom-nav{
+  .van-goods-action{
+    border:1px solid #D7D7D7;
+    .van-goods-action-icon{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .bottom-nav-item-icon{
+        height:0.5rem;
+        width: 0.5rem;
+
+        svg{
+          height: 100%;
+          width: 100%;
+          object-fit: contain;
+        }
+      }
+    }
+  }
+}
+
+.van-goods-action-button--first {
+  margin-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.van-goods-action-button--last{
+  margin-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.van-goods-action-button{
+  height:100%;
+}
+
+.addToCart{
+  color:red;
+  border-left: 1px solid #D7D7D7;
+  border-right: 1px solid #D7D7D7;
+}
+
+.van-goods-action {
+  position:absolute;
+  bottom:0;
+}
