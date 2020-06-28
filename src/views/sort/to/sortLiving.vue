@@ -6,7 +6,15 @@
 
 <script>
 export default {
-  name: "category"
+  name: "category",
+  data() {
+    return {
+
+    }
+  },
+  beforeMount() {
+
+  }
 };
 </script>
 

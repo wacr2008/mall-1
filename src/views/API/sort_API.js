@@ -10,7 +10,7 @@ export const getSortData = () => {
 
 export function getSortDataSe(pidNum) {
   return request({ url: SORT_URL_SECOND(pidNum) }).then(data => {
-    console.log(data);
+    // console.log(data);
     return data.data.data;
   });
 };
