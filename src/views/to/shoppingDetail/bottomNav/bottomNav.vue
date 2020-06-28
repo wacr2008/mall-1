@@ -2,9 +2,9 @@
   <div class="bottom-nav">
     <van-goods-action>
       <van-goods-action-icon
-        :click="func[index]"
         v-for="(textContent, index) in text"
         :key="index"
+        @click="onClickRouterTo(routerTo[index])"
       >
         <div class="bottom-nav-item">
           <div class="bottom-nav-item-icon">
@@ -14,6 +14,20 @@
           </div>
           <div class="bottom-nav-item-text">
             {{ textContent }}
+          </div>
+        </div>
+      </van-goods-action-icon>
+      <van-goods-action-icon @click="onClickCollect">
+        <div class="bottom-nav-item">
+          <div class="bottom-nav-item-icon">
+            <svg class="icon" aria-hidden="true">
+              <use
+                :xlink:href="collect ? '#icon-shoucang1' : '#icon-soucang'"
+              ></use>
+            </svg>
+          </div>
+          <div class="bottom-nav-item-text">
+            收藏
           </div>
         </div>
       </van-goods-action-icon>
@@ -27,7 +41,7 @@
         text="立即购买"
         @click="onClickBuyNow"
       />
-      <van-sku v-model="show" :sku="sku" :goods="goods"/>
+      <van-sku v-model="show" :sku="sku" :goods="goods" />
     </van-goods-action>
   </div>
 </template>
@@ -36,11 +50,12 @@
 export default {
   data() {
     return {
+      collect: false,
       show: false,
       name: "bottomNav",
-      text: ["客服", "收藏", "购物车"],
-      func: ["onClickCustomer", "onClickCollect", "onClickCart"],
-      defaultIcon: ["#icon-kefu", "#icon-soucang", "#icon-gouwuche"],
+      text: ["客服", "购物车"],
+      defaultIcon: ["#icon-kefu", "#icon-gouwuche"],
+      routerTo: ["/customerServe", "/cart"],
       sku: {
         tree: [
           {
@@ -126,12 +141,25 @@ export default {
     };
   },
   methods: {
-    onClickCustomer() {
-      this.$router.push("/customerServe");
+    onClickRouterTo(sp) {
+      this.$router.push(sp);
     },
-    onClickCollect() {},
-    onClickCart() {
-      this.$router.push("/shoppingCart");
+    onClickCollect() {
+      if (!this.collect) {
+        this.collect = true;
+        this.$toast({
+          iconPrefix: "svg",
+          message: "已收藏",
+          icon: "#icon-shoucang1"
+        });
+      } else {
+        this.collect = false;
+        this.$toast({
+          iconPrefix: "svg",
+          message: "已取消收藏",
+          icon: "#icon-soucang"
+        });
+      }
     },
     onClickAddCart() {},
     onClickBuyNow() {

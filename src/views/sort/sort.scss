@@ -1,0 +1,78 @@
+.sort{
+  background-color: #fff;
+  height:100%;
+
+  header {
+    height: 1rem;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    z-index:1;
+    background-color: #fff;
+    border-bottom: 1px solid #7D7D7D;
+
+    .header-search {
+      width:80%;
+      display: flex;
+      border:1px solid #DADADA;
+      height: 80%;
+      font-size: inherit;
+      border-radius: 1rem;
+      margin-left: 0.5rem;
+
+      input{
+        padding-left: 0.5rem;
+        background-color: rgba(0,0,0,0);
+      }
+    }
+
+    .header-shopping-cart{
+      width: 15%;
+      height: 100%;
+      border:none;
+
+      .van-icon{
+        height:0.5rem;
+        width: 0.5rem;
+
+        img{
+          height: 100%;
+          width: 100%;
+          object-fit: contain;
+        }
+      }
+    }
+  }
+
+  &-contain{
+    height:calc(100% - 1rem);
+    display: flex;
+
+    &-leftNav{
+      width: 30%;
+      height:100%;
+
+      .van-sidebar{
+        width: 100%;
+        height: 100%;
+
+        .van-sidebar-item{
+          padding:0.3rem 12px;
+          border:0.5px solid #ECECEC;
+        }
+
+        .van-sidebar-item--select{
+          border-right: 0;
+        }
+
+        .van-sidebar-item--select::before{
+          height:100%;
+        }
+      }
+    }
+    &-rightItem{
+      width:100%;
+      overflow-y: auto;
+    }
+  }
+}

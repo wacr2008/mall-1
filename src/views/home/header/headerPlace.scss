@@ -1,0 +1,94 @@
+.van-button--normal{
+  padding: 0;
+}
+
+header {
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top:0;
+  left:0;
+  width: 100%;
+  z-index:1;
+  background-color: #fff;
+
+  .header-place {
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: medium;
+    border:none;
+    height:1rem;
+
+    .van-button__text{
+      display: flex;
+
+      .header-place-moreImg {
+        width: 0.2rem;
+        height: 0.2rem;
+        align-items: center;
+        margin-left: 0.15rem;
+
+        img {
+          height: 100%;
+          width: 100%;
+          object-fit: contain;
+        }
+      }
+    }
+  }
+
+  .header-search {
+    width:65%;
+    display: flex;
+    border:1px solid #DADADA;
+    height: 90%;
+    font-size: inherit;
+    border-radius: 1rem;
+
+    .header-search-left {
+      height: 100%;
+      display: flex;
+      width: 30%;
+      font-size: medium;
+      line-height: 0.9rem;
+      margin:0 0.1rem;
+      justify-content: center;
+
+      &-downIcon{
+        width: 0.2rem;
+        height: 0.2rem;
+        align-items: center;
+        margin-left: 0.15rem;
+
+        img{
+          height: 100%;
+          width: 100%;
+          object-fit: contain;
+        }
+      }
+    }
+    input{
+      background-color: rgba(0,0,0,0);
+    }
+  }
+
+  .header-shopping-cart{
+    width: 15%;
+    height: 100%;
+    border:none;
+
+    .van-icon{
+      height:0.5rem;
+      width: 0.5rem;
+
+      img{
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+      }
+    }
+  }
+}
