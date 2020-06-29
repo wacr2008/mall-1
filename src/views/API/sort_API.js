@@ -13,4 +13,4 @@ export function getSortDataSe(pidNum) {
     // console.log(data);
     return data.data.data;
   });
-};
+}

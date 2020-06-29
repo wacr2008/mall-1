@@ -1,0 +1,131 @@
+.cart{
+  header{
+    width: 100%;
+    height:1rem;
+    background-color: #fff;
+    display: flex;
+    font-size: initial;
+    align-items: center;
+    position:relative;
+
+    .cart-header-title{
+      margin:auto;
+    }
+
+    .cart-header-edit{
+      position:absolute;
+      font-size: small;
+      right:0.2rem;
+    }
+  }
+
+  &-contain{
+    letter-spacing: 1px;
+
+    .cart-item{
+      height:4.2rem;
+      width: 100%;
+      background-color: #fff;
+
+      &-title{
+        height:0.8rem;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #E9E9E9;
+
+        &-round{
+          font-size: medium;
+          margin:0 0.2rem;
+
+          svg{
+            color:#DDDDDD;
+          }
+        }
+      }
+
+      &-contain{
+        height: 2.4rem;
+        border-bottom: 1px solid #E9E9E9;
+        display: flex;
+        align-items: center;
+
+        &-round{
+          font-size: medium;
+          margin: 0 0.2rem;
+          color:#DDDDDD;
+          width: 8%;
+        }
+
+        &-img{
+          height: 2rem;
+          width: 32%;
+          margin: 0 0.2rem;
+
+          img{
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+          }
+        }
+
+        &-detail{
+          width: 60%;
+
+          &-title{
+            font-size: larger;
+            margin:0.05rem 0;
+          }
+
+          &-size,&-color{
+            color: #919191;
+            margin:0.05rem 0;
+          }
+
+          &-priceOrNum{
+            display: flex;
+            margin:0.05rem 0;
+            font-size: initial;
+
+            &-price{
+              color:red;
+            }
+
+            &-num{
+              margin:0 1rem 0 auto;
+            }
+          }
+        }
+      }
+
+      &-message{
+        height:0.8rem;
+        display: flex;
+        align-items: center;
+
+        &-box{
+          margin-left: 0.5rem;
+          padding-right: 0.5rem;
+          color:#989898;
+          white-space: nowrap;   /*超出隐藏  不换行*/
+          overflow: hidden;
+          text-overflow: ellipsis;    /*超出部分设为……*/
+          width: 90%;
+        }
+
+        &-button{
+          margin:0 0.2rem 0 auto;
+          width: 10%;
+        }
+      }
+    }
+  }
+
+  &-total{
+    height:0.8rem;
+    position:absolute;
+    bottom:1rem;
+    width: 100%;
+    display: flex;
+    background-color: #fff;
+  }
+}

@@ -1,19 +1,43 @@
 <template>
-  <div class="sort-category">
-    这是生活用品页面
+  <div class="sort-listUp">
+    <van-collapse v-model="activeNames" accordion>
+      <van-collapse-item
+        v-for="(name, index) in sportItemName"
+        :key="index"
+        :title="name"
+        :name="index"
+      >
+        {{ $route.query.uid }}
+      </van-collapse-item>
+    </van-collapse>
   </div>
 </template>
 
 <script>
+import { getSortDataSe } from "../../API/sort_API";
+
 export default {
-  name: "category",
+  name: "listUp",
   data() {
     return {
-
-    }
+      sportItemName: [],
+      sportItemId: [],
+      uid: 0,
+      activeNames: 0
+    };
   },
-  beforeMount() {
-
+  created() {
+    this.uid = this.$route.query.uid;
+    getSortDataSe(this.uid)
+      .then(data => {
+        data.forEach(e => {
+          this.sportItemName.push(e.secondListName);
+          this.sportItemId.push(e.id);
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 </script>
