@@ -1,0 +1,70 @@
+.topPart{
+  background-color: #fff;
+
+  &-topLine{
+    display: flex;
+
+    &-edit,&-ring{
+      height:0.5rem;
+      width: 0.5rem;
+
+      img{
+        height:100%;
+        width: 100%;
+        object-fit: contain;
+      }
+    }
+
+    &-edit{
+      margin:0.2rem 0 0 0.2rem;
+    }
+
+    &-ring{
+      margin:0.2rem 0.2rem 0 auto;
+    }
+  }
+
+  &-userHeader {
+    margin:auto;
+    height:1.8rem;
+    width: 1.8rem;
+    border-radius: 50%;
+
+    img{
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &-userName{
+    text-align: center;
+    font-size: initial;
+    margin:0.1rem 0;
+    font-weight: 600;
+  }
+
+  &-bottomLine{
+    display: flex;
+    width: 80%;
+    margin:0.2rem auto;
+    align-items: center;
+
+    &-item{
+      display: flex;
+      margin:0 auto;
+
+      &-img{
+        height:0.35rem;
+        width: 0.35rem;
+        margin-right: 0.1rem;
+
+        img{
+          height:100%;
+          width: 100%;
+          object-fit: contain;
+        }
+      }
+    }
+  }
+}

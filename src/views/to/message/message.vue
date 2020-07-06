@@ -32,7 +32,8 @@
 
 <script>
 import { editMessage } from "../../API/cart_API.js";
-import {getBack} from "../../../components/utils.js";
+import { getBack } from "../../../components/utils.js";
+import { Toast } from "vant";
 
 export default {
   name: "message",
@@ -50,15 +51,18 @@ export default {
     getBack,
 
     onClickSubmit() {
-      this.changeMessage();
-      this.$router.push({
-        path: "/cart"
-      });
+      if (!this.message) {
+        Toast.fail("输入内容不能为空");
+      } else {
+        Toast.success("修改成功");
+        this.changeMessage();
+        this.$router.push({
+          path: "/cart"
+        });
+      }
     },
     changeMessage() {
-      editMessage({ goodsId: this.id, bbs: this.message }).then(data => {
-        console.log(data);
-      });
+      editMessage({ goodsId: this.id, bbs: this.message }).then(data => data);
     }
   },
   created() {

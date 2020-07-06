@@ -56,13 +56,11 @@
           </div>
           <div class="cartEdit-item-message" v-if="!shopping[index].bbs">
             <div class="cartEdit-item-message-box">暂未编辑留言</div>
-            <div class="cartEdit-item-message-button" @click="onClickMessage(index)">留言</div>
           </div>
           <div class="cartEdit-item-message" v-if="shopping[index].bbs">
             <div class="cartEdit-item-message-box">
               {{ shopping[index].bbs }}
             </div>
-            <div class="cartEdit-item-message-button" @click="onClickMessage(index)">修改</div>
           </div>
         </div>
       </van-checkbox-group>
@@ -113,21 +111,7 @@ export default {
       checkTrueAll(this.$refs.checkboxGroup, this.$refs.judge);
     }, //与底部复选框进行绑定，若全选则自动勾选，否则取消勾选
 
-    onClickMessage(index) {
-      this.$router.push({
-        path: "/message",
-        query: {
-          message: this.shopping[index].bbs,
-          img: this.shoppingImg[`index${index}`],
-          title: this.shopping[index].goodsName,
-          price: this.shopping[index].price,
-          id: this.shopping[index].goodsId,
-          indexTrans: index
-        }
-      });
-    },
-
-    getBack
+    getBack //返回上一页
   },
   created() {
     this.shopping = this.$route.query.shopping;
