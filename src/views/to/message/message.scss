@@ -1,0 +1,72 @@
+.message{
+  header{
+    width: 100%;
+    height:1rem;
+    background-color: #fff;
+    display: flex;
+    font-size: initial;
+    align-items: center;
+    position:relative;
+    border-bottom: 1px solid #E6E6E6;
+
+    .message-header-back{
+      position:absolute;
+      height:0.5rem;
+      width: 0.5rem;
+      margin-left: 0.2rem;
+    }
+
+    .message-header-title{
+      margin:auto;
+    }
+
+    .message-header-submit{
+      position:absolute;
+      font-size: small;
+      right:0.2rem;
+    }
+  }
+
+  &-contain{
+    width: 90%;
+    margin: 0.2rem auto 0 auto;
+
+    &-topItem{
+      display: flex;
+      width: 100%;
+      height:1.75rem;
+
+      &-img{
+        height:100%;
+        width: 1.5rem;
+
+        img{
+          height:100%;
+          width: 100%;
+          object-fit: contain;
+        }
+      }
+
+      &-prAti{
+        margin-left:0.2rem;
+        font-size: initial;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+    }
+
+    &-input{
+      height:3rem;
+      width: 100%;
+      border:1px solid #EBEBEB;
+      font-size: initial;
+
+      textarea{
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+      }
+    }
+  }
+}

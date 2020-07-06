@@ -1,42 +1,42 @@
 <template>
   <div class="cart">
     <header>
+      <button class="cart-header-back" @click="getBack">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-back"></use>
+        </svg>
+      </button>
       <div class="cart-header-title">购物车 ({{ num }})</div>
-      <div class="cart-header-edit">
+      <div class="cart-header-edit" @click="onClickCartEdit">
         编辑
       </div>
     </header>
     <div class="cart-contain">
       <van-checkbox-group v-model="checked" ref="checkboxGroup">
-      <div class="cart-item"
-           v-for="(x,index) in shopping"
-           :key="index"
-      >
+        <div class="cart-item" v-for="(x, index) in shopping" :key="index">
           <div class="div-space"></div>
           <div class="cart-item-title">
-            <van-checkbox :name="index">
+            <van-checkbox :name="index" @click="getTotalPrice">
               <template #icon="props">
                 <div class="cart-item-title-round">
                   <svg class="icon" aria-hidden="true">
                     <use
-                      :xlink:href=
-                        "props.checked ? activeIcon : inactiveIcon"
+                      :xlink:href="props.checked ? activeIcon : inactiveIcon"
                     ></use>
                   </svg>
-                  {{ shopping[index].title }}
+                  {{ shopping[index].goodsName }}
                 </div>
               </template>
             </van-checkbox>
           </div>
           <div class="cart-item-contain">
             <div class="cart-item-contain-round">
-              <van-checkbox v-model="checked" :name="index">
+              <van-checkbox :name="index" @click="getTotalPrice">
                 <template #icon="props">
                   <div class="cart-item-contain-round">
                     <svg class="icon" aria-hidden="true">
                       <use
-                        :xlink:href=
-                          "props.checked ? activeIcon : inactiveIcon"
+                        :xlink:href="props.checked ? activeIcon : inactiveIcon"
                       ></use>
                     </svg>
                   </div>
@@ -44,86 +44,186 @@
               </van-checkbox>
             </div>
             <div class="cart-item-contain-img">
-              <img :src="shopping[index].sortImg" alt="err">
+              <img :src="shoppingImg[`index${index}`]" />
             </div>
             <div class="cart-item-contain-detail">
-              <div class="cart-item-contain-detail-title">{{shopping[index].sortTitle}}</div>
-              <div class="cart-item-contain-detail-size">
-                {{shopping[index].sortSize}};{{shopping[index].sortMaterial}}
+              <div class="cart-item-contain-detail-title">
+                {{ shopping[index].goodsName }}
               </div>
-              <div class="cart-item-contain-detail-color">{{shopping[index].color}}</div>
+              <div class="cart-item-contain-detail-size">
+                {{ shopping[index].goodsAttr }}:
+                {{ shopping[index].goodsAttrVal }}
+              </div>
+              <div class="cart-item-contain-detail-color">
+                {{ shopping[index].color }}
+              </div>
               <div class="cart-item-contain-detail-priceOrNum">
-                <div class="cart-item-contain-detail-priceOrNum-price">{{shopping[index].price}}</div>
-                <div class="cart-item-contain-detail-priceOrNum-num">x{{shopping[index].num}}</div>
+                <div class="cart-item-contain-detail-priceOrNum-price">
+                  ￥{{ shopping[index].price }}
+                </div>
+                <div class="cart-item-contain-detail-priceOrNum-num">
+                  x{{ shopping[index].num }}
+                </div>
               </div>
             </div>
           </div>
-          <div class="cart-item-message" v-if="!shopping[index].message">
+          <div class="cart-item-message" v-if="!shopping[index].bbs">
             <div class="cart-item-message-box">暂未编辑留言</div>
-            <div class="cart-item-message-button">留言</div>
+            <div
+              class="cart-item-message-button"
+              @click="onClickMessage(index)"
+            >
+              留言
+            </div>
           </div>
-          <div class="cart-item-message" v-if="shopping[index].message">
-            <div class="cart-item-message-box">{{shopping[index].message}}</div>
-            <div class="cart-item-message-button">修改</div>
+          <div class="cart-item-message" v-if="shopping[index].bbs">
+            <div class="cart-item-message-box">
+              {{ shopping[index].bbs }}
+            </div>
+            <div
+              class="cart-item-message-button"
+              @click="onClickMessage(index)"
+            >
+              修改
+            </div>
           </div>
         </div>
       </van-checkbox-group>
     </div>
     <div class="cart-total">
-      <van-button type="primary" @click="checkAll">全选</van-button>
+      <van-checkbox v-model="choose" @click="fromCheckAll" ref="judge">
+        全选
+      </van-checkbox>
+      <div class="cart-total-priceAll">
+        <span class="cart-total-priceAll-text">
+          合计：
+        </span>
+        <span class="cart-total-priceAll-price"> ￥{{ priceAll }} </span>
+      </div>
+      <van-button type="danger">去结算</van-button>
     </div>
   </div>
 </template>
 
 <script>
+import { checkAll, checkTrueAll } from "../../components/checkRound.js";
+import { getCartData } from "../API/cart_API.js";
+import { getAllShoppingData } from "../API/all_shopping_API.js";
+import { getImgRightPath, getBack } from "../../components/utils.js";
+
 export default {
   name: "cart",
   data() {
     return {
       num: 0,
+      judge: false,
       checked: [],
+      choose: false,
       activeIcon: "#icon-yuan",
       inactiveIcon: "#icon-yuancircle46",
-      shopping:[
-        {
-          title: "家居 Design",
-          sortImg: require('../../assets/img/cart/flower.png'),
-          sortTitle: "木质设计感茶几",
-          sortSize: "400*400*560cm",
-          sortMaterial: "黑胡桃木",
-          color: "黑胡桃色",
-          price: "￥ 290",
-          num: 1,
-          message:'顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶'
-        },
-        {
-          title: "家居 Design",
-          sortImg: require('../../assets/img/cart/flower.png'),
-          sortTitle: "木质设计感茶几",
-          sortSize: "400*400*560cm",
-          sortMaterial: "黑胡桃木",
-          color: "黑胡桃色",
-          price: "￥ 290",
-          num: 1,
-          message:''
-        }
-      ]
+      priceAll: 0,
+      allButton: false,
+      indexTrans: 0,
+      shoppingImg: {},
+      shopping: []
     };
   },
+  created() {
+    if (this.$route.query.message) {
+      this.indexTrans = this.$route.query.indexTrans;
+      this.shopping[this.indexTrans].message = this.$route.query.message;
+    }
+    this.getData();
+  },
+  updated() {
+    if (!this.judge) {
+      this.judge = true;
+      this.getImg();
+    }
+    this.fromCheckTrueAll();
+  },
   methods: {
-    checkAll() {
-      const childrenLength = this.$refs.checkboxGroup.children.length;
-      for(let i = 0; i < childrenLength; i++){
-        console.log(this.$refs.checkboxGroup.children[i].$el.ariaChecked)
-        if(this.$refs.checkboxGroup.children[i].$el.ariaChecked === 'false'){
-          this.$refs.checkboxGroup.toggleAll(true);
-          break;
-        }
-        else if(i === (childrenLength-1)){     //如果到最后仍没有跳出循环则已为全选
-          this.$refs.checkboxGroup.toggleAll();
+    fromCheckAll() {
+      checkAll(this.$refs.checkboxGroup);
+      this.allButton = true;
+      this.getTotalPrice();
+    }, //  全选，如果已全选则全部取消全选
+
+    fromCheckTrueAll() {
+      checkTrueAll(this.$refs.checkboxGroup, this.$refs.judge);
+    }, //与底部复选框进行绑定，若全选则自动勾选，否则取消勾选
+
+    getTotalPrice() {
+      this.priceAll = 0;
+      if (!this.allButton) {
+        this.$refs.checkboxGroup.children.forEach((e, j) => {
+          if (e.$el.ariaChecked === "true" && j % 2 === 1) {
+            this.priceAll +=
+              this.shopping[parseInt(j / 2)].price *
+              this.shopping[parseInt(j / 2)].num;
+          }
+        });
+      } else {
+        if (this.$refs.judge.$el.ariaChecked === "true") {
+          this.$refs.checkboxGroup.children.forEach((e, j) => {
+            if (j % 2 === 1) {
+              this.priceAll +=
+                this.shopping[parseInt(j / 2)].price *
+                this.shopping[parseInt(j / 2)].num;
+            }
+          });
+        } else {
+          this.priceAll = 0;
         }
       }
-    }  //  全选，如果已全选则全部取消全选
+      this.allButton = false;
+    }, //获取已选商品的总价
+
+    onClickCartEdit() {
+      this.$router.push({
+        path: "/cartEdit",
+        query: {
+          shoppingImg: this.shoppingImg,
+          shopping: this.shopping,
+          shoppingNum: this.num
+        }
+      });
+    }, //跳转编辑页面
+
+    onClickMessage(index) {
+      this.$router.push({
+        path: "/message",
+        query: {
+          message: this.shopping[index].bbs,
+          img: this.shoppingImg[`index${index}`],
+          title: this.shopping[index].goodsName,
+          price: this.shopping[index].price,
+          id: this.shopping[index].goodsId,
+          indexTrans: index
+        }
+      });
+    }, //跳转留言页面
+
+    getBack, //回退按钮
+
+    getData() {
+      getCartData().then(data => {
+        data.forEach(e => {
+          this.shopping.push(e);
+          this.num++;
+        });
+      });
+    }, // 获取后端数据并存入本地
+
+    getImg() {
+      this.shopping.forEach((e, i) => {
+        getAllShoppingData(e.goodsId, e.goodsName).then(data => {
+          this.shoppingImg[`index${i}`] = getImgRightPath(data[0].img);
+          this.shoppingImg = { ...this.shoppingImg }; //重新绑定this，变为新的Vue对象
+          return data;
+        });
+      });
+    } // 从另一个接口获得图片URL并存入本地
   }
 };
 </script>

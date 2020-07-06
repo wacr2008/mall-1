@@ -1,4 +1,7 @@
 .position{
+  height: 100%;
+  overflow-y: auto;
+
   &-header{
     height:0.8rem;
     display: flex;
@@ -40,6 +43,19 @@
     font-size: initial;
   }
 
+  .header-hot{
+    height:0.8rem;
+    width: 100%;
+    font-size: initial;
+    background-color: #F1F1F1;
+    font-weight: 600;
+    line-height: 0.8rem;
+
+    &-title{
+      margin-left: 0.3rem;
+    }
+  }
+
   .header-hot-example{
     display: flex;
     flex-wrap:wrap;
@@ -54,5 +70,9 @@
       text-align: center;
       margin:0.1rem;
     }
+  }
+
+  .van-index-bar{
+    overflow-y: auto;
   }
 }

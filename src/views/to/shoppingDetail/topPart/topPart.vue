@@ -1,7 +1,7 @@
 <template>
   <div class="top-part">
     <div class="top-part-topLine">
-      <button class="top-part-topLine-back" @click="onClickBack">
+      <button class="top-part-topLine-back" @click="getBack">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-back"></use>
         </svg>
@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import { getBack } from "../../../../components/utils.js";
+
 export default {
   data() {
     return {
@@ -75,9 +77,7 @@ export default {
     };
   },
   methods: {
-    onClickBack() {
-      this.$router.go(-1);
-    }
+    getBack
   }
 };
 </script>

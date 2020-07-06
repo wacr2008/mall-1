@@ -22,9 +22,11 @@
       当前定位：{{ nowCity }}
     </div>
     <van-index-bar :index-list="indexList">
-      <van-index-anchor index="#" class="header-hot">
-        热门城市
-      </van-index-anchor>
+      <div class="header-hot">
+        <div class="header-hot-title">
+          热门城市
+        </div>
+      </div>
       <div class="header-hot-example">
         <div
           class="header-hot-example-item"
@@ -35,54 +37,34 @@
           {{ name }}
         </div>
       </div>
-      <van-index-anchor index="A">A</van-index-anchor>
-      <van-cell title="文本" />
-      <van-cell title="文本" />
-      <van-cell title="文本" />
-      <van-index-anchor index="B">B</van-index-anchor>
-      <van-cell title="文本" />
-      <van-cell title="文本" />
-      <van-cell title="文本" />
+      <van-index-anchor
+        v-for="(item, indexItem) in indexList"
+        :key="indexItem"
+        :index="item"
+      >
+        {{ item }}
+        <van-cell
+          v-for="(itemPlace, index) in placeWithArr[item]"
+          :key="index"
+          :title="itemPlace.name"
+          @click="onClickMessage($event)"
+        />
+      </van-index-anchor>
     </van-index-bar>
   </div>
 </template>
 
 <script>
+import { getPosition } from "../../API/home_API.js";
+
 export default {
   data() {
     return {
       value: "",
       name: "position",
       nowCity: "杭州市",
-      indexList: [
-        "#",
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "J",
-        "K",
-        "L",
-        "M",
-        "N",
-        "O",
-        "P",
-        "Q",
-        "R",
-        "S",
-        "T",
-        "U",
-        "V",
-        "W",
-        "X",
-        "Y",
-        "Z"
-      ],
+      indexList: [],
+      placeWithArr: {},
       hotCity: [
         "北京市",
         "天津市",
@@ -100,7 +82,27 @@ export default {
   methods: {
     changeNowCity(name) {
       this.nowCity = name;
+    },
+    getAllPositionList() {
+      getPosition().then(data => {
+        this.placeWithArr = data.data;
+        const dataArr = Object.keys(data.data);
+        dataArr.forEach(e => {
+          this.indexList.push(e);
+        });
+      });
+    },
+    onClickMessage(e) {
+      if (e.target.textContent) {
+        this.nowCity = e.target.textContent;
+      }
+    },
+    onClickSearch() {
+
     }
+  },
+  created() {
+    this.getAllPositionList();
   }
 };
 </script>

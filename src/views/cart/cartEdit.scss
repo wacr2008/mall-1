@@ -1,4 +1,4 @@
-.cart{
+.cartEdit{
   header{
     width: 100%;
     height:1rem;
@@ -8,18 +8,18 @@
     align-items: center;
     position:relative;
 
-    .cart-header-back{
+    .cartEdit-header-back{
       position:absolute;
       height:0.5rem;
       width: 0.5rem;
       margin-left: 0.2rem;
     }
 
-    .cart-header-title{
+    .cartEdit-header-title{
       margin:auto;
     }
 
-    .cart-header-edit{
+    .cartEdit-header-edit{
       position:absolute;
       font-size: small;
       right:0.2rem;
@@ -29,7 +29,7 @@
   &-contain{
     letter-spacing: 1px;
 
-    .cart-item{
+    .cartEdit-item{
       height:4.2rem;
       width: 100%;
       background-color: #fff;
@@ -75,30 +75,12 @@
           }
         }
 
-        &-detail{
-          width: 60%;
-
-          &-title{
-            font-size: larger;
-            margin:0.05rem 0;
-          }
-
-          &-size,&-color{
-            color: #919191;
-            margin:0.05rem 0;
-          }
-
-          &-priceOrNum{
-            display: flex;
-            margin:0.05rem 0;
-            font-size: initial;
-
-            &-price{
-              color:red;
-            }
-
-            &-num{
-              margin:0 0.5rem 0 auto;
+        &-addOrReduce{
+          .van-stepper{
+            /deep/{
+              .van-stepper__input{
+                width: 1.5rem;
+              }
             }
           }
         }
@@ -140,17 +122,25 @@
       margin-left: 0.2rem;
     }
 
-    &-priceAll{
+    &-collect{
       margin-left: auto;
-      margin-right: 0.2rem;
+      width: 1.5rem;
+      height:100%;
 
-      &-price{
-        color: red;
+      button{
+        width: 100%;
+        height:100%;
       }
     }
 
-    button{
+    &-remove{
+      width: 1.5rem;
       height:100%;
+
+      button{
+        width: 100%;
+        height:100%;
+      }
     }
   }
 }

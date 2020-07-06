@@ -1,16 +1,20 @@
-import { SORT_URL_FIRST, SORT_URL_SECOND } from "./URLs.js";
+import { SORT_URL_FIRST, SORT_URL_SECOND, SORT_URL_THIRD } from "./URLs.js";
 import request from "./vender/request.js";
 
-export const getSortData = () => {
+export function getSortData() {
   return request({ url: SORT_URL_FIRST }).then(data => {
-    // console.log(data);
     return data.data.data;
   });
-};
+}
 
-export function getSortDataSe(pidNum) {
-  return request({ url: SORT_URL_SECOND(pidNum) }).then(data => {
-    // console.log(data);
+export function getSortDataSecond(pid) {
+  return request({ url: SORT_URL_SECOND(pid) }).then(data => {
     return data.data.data;
+  });
+}
+
+export function getSortDataThird(id) {
+  return request({ url: SORT_URL_THIRD(id) }).then(data => {
+    return data;
   });
 }
