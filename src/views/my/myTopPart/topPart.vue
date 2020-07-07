@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="topPart-userHeader">
-      <img :src="user.headerImg" alt="err" />
+      <img :src="user.headerImg" alt="err" @click="onClickMyMessage" />
     </div>
     <div class="topPart-userName">
       {{ user.name }}
@@ -41,6 +41,8 @@
 
 <script>
 import { Toast } from "vant";
+import { getMyData } from "../../API/my_API.js";
+import { getImgRightPath } from "../../../components/utils.js";
 
 export default {
   name: "myTopPart",
@@ -48,7 +50,7 @@ export default {
     return {
       user: {
         headerImg: require("../../../assets/img/my/topPart/myHeader.png"),
-        name: "Caster"
+        name: "未登录"
       },
       bottomLine: [
         {
@@ -72,22 +74,52 @@ export default {
   },
   methods: {
     onClick(str) {
-      if (str === "签到") {
-        this.bottomLine[0].text = "已签到";
-        const arr = [...document.querySelectorAll(".topPart-bottomLine-item")];
-        arr[0].style.color = "#D1D1D1";
-        Toast.success("已签到");
-      } else if (str === "收藏") {
-        console.log(2);
-      } else if (str === "分享") {
-        console.log(3);
-      } else if (str === "足迹") {
-        console.log(4);
+      if (this.user.name === "未登录") {
+        Toast.fail("请先登录");
+      } else {
+        if (str === "签到") {
+          this.bottomLine[0].text = "已签到";
+          const arr = [...document.querySelectorAll(".topPart-bottomLine-item")];
+          arr[0].style.color = "#D1D1D1";
+          Toast.success("已签到");
+        } else if (str === "收藏") {
+          Toast.success("收藏");
+        } else if (str === "分享") {
+          Toast.success("分享");
+        } else if (str === "足迹") {
+          Toast.success("足迹");
+        }
       }
     },
     onClickEdit() {
       this.$router.push("/setting");
-    }
+    },
+    onClickMyMessage() {
+      if (this.user.name === "未登录") {
+        this.$router.push("/signIn");
+      } else {
+        this.$router.push({
+          path: "/myMessage",
+          query: {
+            headerImg: this.user.headerImg,
+            name: this.user.name
+          }
+        });
+      }
+    },
+    getMyData() {
+      getMyData().then(data => {
+        // console.log(data);
+        if (data.img) {
+          this.user.headerImg = this.getImgRightPath(data.img);
+          this.user.name = data.userName;
+        }
+      });
+    },
+    getImgRightPath
+  },
+  created() {
+    this.getMyData();
   }
 };
 </script>

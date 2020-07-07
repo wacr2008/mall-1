@@ -29,3 +29,6 @@ export const CART_URL_GET_DATA =
 
 export const CART_URL_MODIFY =
   "./api/chenzw_fxsc/choose/editchoosegoods.action";
+
+/* 我的页面URL */
+export const MY_URL_GET_DATA = "./api/chenzw_fxsc/user/seluser.action";

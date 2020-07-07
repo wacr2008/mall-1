@@ -25,5 +25,5 @@ export function getImgRightPath(pathW) {
  * 回退到上个页面
  */
 export function getBack() {
-  this.$router.go(-1);
+  history.go(-1);
 }
