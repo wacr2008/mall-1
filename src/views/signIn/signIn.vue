@@ -75,7 +75,7 @@
                   size="small"
                   type="default"
                   :disabled="ifClick"
-                  @click="onCaptchaClick"
+                  @click="onCaptchaClick(60)"
                 >
                   {{ clickMessage }}
                 </van-button>
@@ -120,6 +120,9 @@
 <script>
 import { getBack } from "../../components/utils.js";
 import { onCaptchaClick } from "../../components/onCaptchaClick.js";
+import { signInJudge } from "../API/signIn_API.js";
+import { Toast } from "vant";
+import { setCookie, getCookie } from "../../components/cookie.js";
 
 export default {
   name: "signIn",
@@ -138,8 +141,26 @@ export default {
   methods: {
     getBack,
     onSubmitLogIn() {
-      console.log("log in");
-      this.$router.push("/successSignIn");
+      signInJudge(this.username, this.password).then(data => {
+        if (data.message === "服务器出错") {
+          Toast.fail("请检查账号与密码");
+        }
+        if (data.success === true) {
+          setCookie("token", data.token);
+          const jump = setInterval(() => {
+            if (getCookie("token") !== "未找到对应cookie") {
+              this.$router.push("/successSignIn");
+              clearInterval(jump);
+            } else {
+              Toast.loading({
+                message: "请稍后...",
+                forbidClick: true,
+                duration: 100
+              });
+            }
+          }, 100);
+        }
+      });
     }, //登录
     onSubmitRegister() {
       console.log("register");

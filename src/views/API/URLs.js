@@ -25,10 +25,17 @@ export function SORT_URL_THIRD(id) {
 
 /*购物车URL*/
 export const CART_URL_GET_DATA =
-  "./api/chenzw_fxsc/choose/selchoosegoods.action";
+  "./api/chenzw_fxsc/choose/selchoosegoods.action"; //获取购物车信息
 
 export const CART_URL_MODIFY =
-  "./api/chenzw_fxsc/choose/editchoosegoods.action";
+  "./api/chenzw_fxsc/choose/editchoosegoods.action"; //修改购物车内容
 
 /* 我的页面URL */
-export const MY_URL_GET_DATA = "./api/chenzw_fxsc/user/seluser.action";
+export const MY_URL_GET_DATA = "./api/chenzw_fxsc/user/seluser.action"; //获取用户信息
+
+export const MY_URL_EDIT_DATA = "./api/chenzw_fxsc/user/edituser.action"; //修改用户信息
+
+/*登录页面URL*/
+export const SING_IN_URL = "./api/chenzw_fxsc/user/login.action"; //登录
+
+export const REGISTER_URL = "./api/chenzw_fxsc/user/register.action"; //注册

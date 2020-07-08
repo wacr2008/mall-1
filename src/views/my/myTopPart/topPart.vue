@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="topPart-userHeader">
-      <img :src="user.headerImg" alt="err" @click="onClickMyMessage" />
+      <img :src="user.headerImg" @click="onClickMyMessage" />
     </div>
     <div class="topPart-userName">
       {{ user.name }}
@@ -41,17 +41,20 @@
 
 <script>
 import { Toast } from "vant";
-import { getMyData } from "../../API/my_API.js";
+import { getMyData, editData } from "../../API/my_API.js";
 import { getImgRightPath } from "../../../components/utils.js";
+import { getCookie } from "../../../components/cookie.js";
 
 export default {
   name: "myTopPart",
   data() {
     return {
+      phone: "",
       user: {
-        headerImg: require("../../../assets/img/my/topPart/myHeader.png"),
+        headerImg: "",
         name: "未登录"
       },
+      dataGet: {},
       bottomLine: [
         {
           img: require("../../../assets/img/my/topPart/signIn.png"),
@@ -75,19 +78,32 @@ export default {
   methods: {
     onClick(str) {
       if (this.user.name === "未登录") {
-        Toast.fail("请先登录");
+        Toast.fail("请先点击头像登录");
       } else {
-        if (str === "签到") {
-          this.bottomLine[0].text = "已签到";
-          const arr = [...document.querySelectorAll(".topPart-bottomLine-item")];
-          arr[0].style.color = "#D1D1D1";
-          Toast.success("已签到");
-        } else if (str === "收藏") {
-          Toast.success("收藏");
-        } else if (str === "分享") {
-          Toast.success("分享");
-        } else if (str === "足迹") {
-          Toast.success("足迹");
+        switch (str) {
+          case "签到": {
+            this.bottomLine[0].text = "已签到";
+            const arr = [...document.querySelectorAll(".topPart-bottomLine-item")];
+            arr[0].style.color = "#D1D1D1";
+            editData(true);
+            Toast.success("已签到");
+            break;
+          }
+          case "收藏":
+            Toast.success("收藏");
+            break;
+          case "分享": {
+            Toast.success("分享");
+            break;
+          }
+          case "足迹": {
+            Toast.success("足迹");
+            break;
+          }
+          case "已签到": {
+            Toast("今日已签到，请明天再来");
+            break;
+          }
         }
       }
     },
@@ -109,17 +125,32 @@ export default {
     },
     getMyData() {
       getMyData().then(data => {
-        // console.log(data);
+        this.dataGet = data;
+        console.log(this.dataGet);
         if (data.img) {
           this.user.headerImg = this.getImgRightPath(data.img);
           this.user.name = data.userName;
+          if (data.state === 1) {
+            this.bottomLine[0].text = "已签到";
+            const arr = [...document.querySelectorAll(".topPart-bottomLine-item")];
+            arr[0].style.color = "#D1D1D1";
+          }
         }
       });
     },
-    getImgRightPath
+    getImgRightPath,
+    getCookie
   },
   created() {
-    this.getMyData();
+    if (this.getCookie("headerImg") !== "未找到对应cookie") {
+      this.user.headerImg = this.getCookie("headerImg");
+    }
+    if (this.getCookie("token") !== "未找到对应cookie") {
+      this.getMyData();
+    }
+    if (this.user.headerImg === "") {
+      this.user.headerImg = require("../../../assets/img/my/topPart/myHeader.png");
+    }
   }
 };
 </script>

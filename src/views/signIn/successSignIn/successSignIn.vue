@@ -1,10 +1,11 @@
 <template>
   <div class="successSignIn">
     <div class="successSignIn-headerImg">
-      <img
-        :src="require('../../../assets/img/signIn/defaultHeader.png')"
-        alt="err"
-      />
+      <van-circle v-model="rate" color="red" :rate="100" :speed="50">
+        <template #default>
+          <img :src="userImg" />
+        </template>
+      </van-circle>
     </div>
     <div class="successSignIn-welcome">
       欢迎登录
@@ -19,12 +20,34 @@
 </template>
 
 <script>
+import { getMyData } from "../../API/my_API.js";
+import { setCookie } from "../../../components/cookie.js";
+import { getImgRightPath } from "../../../components/utils.js";
+
 export default {
   name: "successSignIn",
   data() {
     return {
-      userImg: ""
+      userImg: "",
+      rate: 0,
+      phone: ""
     };
+  },
+  methods: {
+    autoJump() {
+      setTimeout(() => {
+        this.$router.push("/my").catch(() => {});
+      }, 2000);
+    },
+    getMyData,
+    getImgRightPath
+  },
+  created() {
+    this.autoJump();
+    this.getMyData().then(data => {
+      this.userImg = this.getImgRightPath(data.img);
+      setCookie("headerImg", this.userImg);
+    });
   }
 };
 </script>
@@ -35,6 +58,8 @@ export default {
     height: 2rem;
     width: 2rem;
     margin: 4rem auto 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
 
     img {
       height: 100%;

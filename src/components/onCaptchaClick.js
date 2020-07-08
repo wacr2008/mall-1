@@ -1,7 +1,7 @@
-export function onCaptchaClick() {
+export function onCaptchaClick(settingTime) {
   //send captcha
   this.ifClick = true;
-  let showTime = 10;
+  let showTime = settingTime;
   const countDown = setInterval(() => {
     this.clickMessage = `请在${showTime}s后重试`;
     showTime--;
