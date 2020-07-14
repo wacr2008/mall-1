@@ -1,5 +1,5 @@
 import request from "./vender/request.js";
-import { SING_IN_URL, REGISTER_URL } from "./URLs.js";
+import { SING_IN_URL, REGISTER_URL, SENDSMS_URL } from "./URLs.js";
 
 export function signInJudge(phone, password) {
   return request({
@@ -16,7 +16,8 @@ export function signInJudge(phone, password) {
 }
 
 export function registerAccount(data) {
-  const { phoneData, passwordData, referralCodeData, codeData } = data;
+  const { phoneData, passwordData, codeData, referralCodeData } = data;
+  console.log(phoneData, passwordData, referralCodeData, codeData);
   return request({
     url: REGISTER_URL,
     data: {
@@ -28,7 +29,17 @@ export function registerAccount(data) {
       code: codeData
     }
   }).then(data => {
-    console.log(data);
-    return data;
+    return data.data;
+  });
+}
+
+export function sendSMS(data) {
+  return request({
+    url: SENDSMS_URL,
+    data: {
+      phone: data
+    }
+  }).then(data => {
+    return data.data;
   });
 }

@@ -75,7 +75,7 @@
                   size="small"
                   type="default"
                   :disabled="ifClick"
-                  @click="onCaptchaClick(60)"
+                  @click="onCaptchaClick(username, 10)"
                 >
                   {{ clickMessage }}
                 </van-button>
@@ -120,7 +120,7 @@
 <script>
 import { getBack } from "../../components/utils.js";
 import { onCaptchaClick } from "../../components/onCaptchaClick.js";
-import { signInJudge } from "../API/signIn_API.js";
+import { signInJudge, registerAccount } from "../API/signIn_API.js";
 import { Toast } from "vant";
 import { setCookie, getCookie } from "../../components/cookie.js";
 
@@ -146,29 +146,52 @@ export default {
           Toast.fail("请检查账号与密码");
         }
         if (data.success === true) {
-          setCookie("token", data.token);
-          const jump = setInterval(() => {
-            if (getCookie("token") !== "未找到对应cookie") {
-              this.$router.push("/successSignIn");
-              clearInterval(jump);
-            } else {
-              Toast.loading({
-                message: "请稍后...",
-                forbidClick: true,
-                duration: 100
-              });
-            }
-          }, 100);
+          this.successLogIn(data);
         }
       });
     }, //登录
+
     onSubmitRegister() {
-      console.log("register");
+      const accountData = {
+        phoneData: this.username,
+        passwordData: this.password,
+        referralCodeData: this.recommend,
+        codeData: this.captcha
+      };
+      registerAccount(accountData).then(data => {
+        const { msg } = data;
+        if (msg !== "注册成功") {
+          Toast.fail(msg);
+        } else {
+          Toast.success("注册成功,2s后自动登录");
+          setTimeout(() => {
+            this.onSubmitLogIn();
+          }, 2000);
+        }
+      });
     }, //注册
+
     onClickForgetPW() {
       this.$router.push("/forgetPassword");
-    },
-    onCaptchaClick //发送验证码
+    }, //忘记密码
+
+    onCaptchaClick, //发送验证码
+
+    successLogIn(data) {
+      setCookie("token", data.token);
+      const jump = setInterval(() => {
+        if (getCookie("token") !== "未找到对应cookie") {
+          this.$router.push("/successSignIn");
+          clearInterval(jump);
+        } else {
+          Toast.loading({
+            message: "请稍后...",
+            forbidClick: true,
+            duration: 100
+          });
+        }
+      }, 100); //100ms判断一次，直到将token存入cookie后才会进行页面跳转
+    } //登录判断，交互优化
   }
 };
 </script>

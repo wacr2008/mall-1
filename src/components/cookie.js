@@ -5,7 +5,7 @@ export function setCookie(key, value) {
 }
 
 export function getCookie(key) {
-  const cookie = document.cookie.split(";");
+  const cookie = document.cookie.split("; ");
   for (let i = 0; i < cookie.length; i++) {
     const temp = cookie[i].split("=");
     if (temp[0] === key) {

@@ -29,6 +29,33 @@
   &-contain{
     letter-spacing: 1px;
 
+    &-empty{
+      width: 80%;
+      margin: 2rem auto 0 auto;
+
+      &-img{
+        height:3rem;
+        width: 100%;
+
+        img {
+          height: 100%;
+          width: 100%;
+          object-fit: contain;
+        }
+      }
+
+      &-text,&-notLog {
+        color:#A2A2A2;
+        text-align: center;
+        margin-top: 0.5rem;
+        font-size: initial;
+
+        span{
+          color:blue;
+        }
+      }
+    }
+
     .cart-item{
       height:4.2rem;
       width: 100%;

@@ -1,4 +1,6 @@
-export function onCaptchaClick(settingTime) {
+import { sendSMS } from "../views/API/signIn_API.js";
+
+export function onCaptchaClick(phone, settingTime = 10) {
   //send captcha
   this.ifClick = true;
   let showTime = settingTime;
@@ -11,4 +13,9 @@ export function onCaptchaClick(settingTime) {
       this.clickMessage = "获取验证码";
     }
   }, 1000);
+  sendSMS(phone).then(data => {
+    if (data.msg === "发送成功") {
+      return data.sendcode;
+    }
+  });
 } //设置验证码倒计时，演示效果只设置10s

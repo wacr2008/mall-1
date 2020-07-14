@@ -28,7 +28,7 @@
               size="small"
               type="default"
               :disabled="ifClick"
-              @click="onCaptchaClick"
+              @click="onCaptchaClick(tel, 10)"
             >
               {{ clickMessage }}
             </van-button>

@@ -34,6 +34,7 @@
 import { editMessage } from "../../API/cart_API.js";
 import { getBack } from "../../../components/utils.js";
 import { Toast } from "vant";
+import { getCookie } from "../../../components/cookie.js";
 
 export default {
   name: "message",
@@ -44,7 +45,8 @@ export default {
       title: "",
       price: "",
       id: 0,
-      indexTrans: 0
+      indexTrans: 0,
+      token: ""
     };
   },
   methods: {
@@ -62,7 +64,9 @@ export default {
       }
     },
     changeMessage() {
-      editMessage({ goodsId: this.id, bbs: this.message }).then(data => data);
+      editMessage({ goodsId: this.id, bbs: this.message }, this.token).then(
+        data => data
+      );
     }
   },
   created() {
@@ -72,6 +76,7 @@ export default {
     this.title = this.$route.query.title;
     this.indexTrans = this.$route.query.indexTrans;
     this.id = this.$route.query.id;
+    this.token = getCookie("token");
   }
 };
 </script>

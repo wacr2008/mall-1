@@ -6,12 +6,33 @@
           <use xlink:href="#icon-back"></use>
         </svg>
       </button>
-      <div class="cart-header-title">购物车 ({{ num }})</div>
+      <div class="cart-header-title">
+        购物车
+        <span v-if="num !== 0">({{ num }})</span>
+      </div>
       <div class="cart-header-edit" @click="onClickCartEdit">
         编辑
       </div>
     </header>
     <div class="cart-contain">
+      <div class="cart-contain-empty" v-if="num === 0">
+        <div class="cart-contain-empty-img">
+          <img :src="require('../../assets/img/cart/EmptyCart.png')" />
+        </div>
+        <div
+          class="cart-contain-empty-text"
+          v-if="tokenGet !== '未找到对应cookie'"
+        >
+          购物车还是空的
+        </div>
+        <div
+          class="cart-contain-empty-notLog"
+          v-if="tokenGet === '未找到对应cookie'"
+          @click="onClickLogIn"
+        >
+          您尚未登录，请先<span>登录</span>
+        </div>
+      </div>
       <van-checkbox-group v-model="checked" ref="checkboxGroup">
         <div class="cart-item" v-for="(x, index) in shopping" :key="index">
           <div class="div-space"></div>
@@ -110,12 +131,13 @@ import { checkAll, checkTrueAll } from "../../components/checkRound.js";
 import { getCartData } from "../API/cart_API.js";
 import { getAllShoppingData } from "../API/all_shopping_API.js";
 import { getImgRightPath, getBack } from "../../components/utils.js";
+import { getCookie } from "../../components/cookie.js";
 
 export default {
   name: "cart",
   data() {
     return {
-      num: 0,
+      num: 0, //商品总数，显示在头部栏
       judge: false,
       checked: [],
       choose: false,
@@ -125,14 +147,11 @@ export default {
       allButton: false,
       indexTrans: 0,
       shoppingImg: {},
-      shopping: []
+      shopping: [],
+      tokenGet: ""
     };
   },
   created() {
-    if (this.$route.query.message) {
-      this.indexTrans = this.$route.query.indexTrans;
-      this.shopping[this.indexTrans].message = this.$route.query.message;
-    }
     this.getData();
   },
   updated() {
@@ -207,13 +226,20 @@ export default {
     getBack, //回退按钮
 
     getData() {
-      getCartData().then(data => {
-        data.forEach(e => {
-          this.shopping.push(e);
-          this.num++;
+      this.tokenGet = getCookie("token");
+      if (this.tokenGet !== "未找到对应cookie") {
+        getCartData(this.tokenGet).then(data => {
+          if (data.data.msg === "查询成功") {
+            data.data.data.forEach(e => {
+              this.shopping.push(e);
+              this.num++;
+            });
+          } else {
+            console.log("无数据");
+          }
         });
-      });
-    }, // 获取后端数据并存入本地
+      } // 获取后端数据并存入本地
+    },
 
     getImg() {
       this.shopping.forEach((e, i) => {
@@ -223,7 +249,10 @@ export default {
           return data;
         });
       });
-    } // 从另一个接口获得图片URL并存入本地
+    }, // 从另一个接口获得图片URL并存入本地
+    onClickLogIn() {
+      this.$router.push("/signIn");
+    }
   }
 };
 </script>

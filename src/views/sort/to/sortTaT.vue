@@ -13,6 +13,7 @@
           <div
             class="listItem-line"
             v-if="sportItemId[activeName] === item.pid"
+            @click="onClickJumpToShoppingDetail(index2)"
           >
             {{ item.name }}
           </div>
@@ -51,21 +52,24 @@ export default {
   },
   methods: {
     getDataSe() {
-      getSortDataSecond(this.uid).then(data => {
-        if (data !== undefined) {
-          data.forEach(e => {
-            this.sportItemName.push(e.secondListName);
-            this.sportItemId.push(e.id);
-          });
-          this.getDataThird();
-        }
-      });
-    },
+      getSortDataSecond(this.uid)
+        .then(data => {
+          if (data !== undefined) {
+            data.forEach(e => {
+              this.sportItemName.push(e.secondListName);
+              this.sportItemId.push(e.id);
+            });
+            this.getDataThird();
+          }
+        })
+        .catch(() => {});
+    }, //获取二级菜单数据
     getDataThird() {
       //获取三级菜单数据
       let i = 0;
       this.sportItemId.forEach(e => {
         getSortDataThird(e).then(data => {
+          console.log(data);
           const goods = data.data.goods;
           if (goods) {
             goods.forEach(e => {
@@ -74,13 +78,21 @@ export default {
               thirdListItem.id = e.id;
               thirdListItem.pid = e.secondList;
 
-              /* 不能将thirdListItem设为返回值，不然数组中所有数据都是一样的*/
+              /* 不能将thirdListItem设为返回值，不然数组中所有数据都是一样的 */
 
               this.thirdList[i] = thirdListItem;
               i++;
             });
           }
         });
+      });
+    },
+    onClickJumpToShoppingDetail(index) {
+      this.$router.push({
+        path: "/shoppingDetail",
+        query: {
+          id: this.thirdList[index].id
+        }
       });
     }
   }

@@ -10,8 +10,8 @@
           />
         </span>
       </van-button>
-      <label class="header-search">
-        <div class="header-search-left" @click="gotoLink">
+      <div class="header-search" @click="gotoLink">
+        <div class="header-search-left">
           <div class="header-search-left-type">商品</div>
           <div class="header-search-left-downIcon">
             <img
@@ -21,7 +21,7 @@
           </div>
         </div>
         <input type="text" placeholder="请输入搜索关键词" />
-      </label>
+      </div>
       <van-button
         :icon="images"
         type="default"

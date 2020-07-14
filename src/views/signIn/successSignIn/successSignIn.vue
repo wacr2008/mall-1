@@ -45,7 +45,11 @@ export default {
   created() {
     this.autoJump();
     this.getMyData().then(data => {
-      this.userImg = this.getImgRightPath(data.img);
+      if (data.img) {
+        this.userImg = this.getImgRightPath(data.img);
+      } else {
+        this.userImg = require("../../../assets/img/my/topPart/myHeader.png");
+      }
       setCookie("headerImg", this.userImg);
     });
   }

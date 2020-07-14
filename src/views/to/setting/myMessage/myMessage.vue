@@ -14,82 +14,208 @@
     <div class="myMessage-otherIFM">
       <van-cell-group>
         <van-cell title="昵称" :value="name" />
-        <van-cell title="性别" is-link v-if="!sex" />
-        <van-cell title="性别" v-if="sex" :value="sex" />
-        <van-cell title="年龄" is-link />
+        <van-cell
+          title="性别"
+          :is-link="item.sex.isLink_sex"
+          :value="item.sex.sex"
+          @click="onClick('sex')"
+        />
+        <van-cell
+          title="年龄"
+          :is-link="item.age.isLink_age"
+          :value="item.age.age"
+          @click="onClick('age')"
+        />
       </van-cell-group>
       <div class="div-space"></div>
       <van-cell-group>
-        <van-cell title="地址" is-link />
+        <van-cell title="地址" is-link @click="onClickMyLocation" />
         <van-cell title="实名认证" is-link />
       </van-cell-group>
+      <van-overlay :show="item.sex.show_sex">
+        <div class="overlay" @click.stop>
+          <div class="overlay-sex">
+            <van-radio-group
+              v-model="item.sex.radio_sex"
+              checked-color="#DE3332"
+            >
+              <div class="sex-radio-title">性别</div>
+              <van-cell-group>
+                <van-cell
+                  title="男"
+                  clickable
+                  @click="item.sex.radio_sex = '0'"
+                >
+                  <template #right-icon>
+                    <van-radio name="0" />
+                  </template>
+                </van-cell>
+                <van-cell
+                  title="女"
+                  clickable
+                  @click="item.sex.radio_sex = '1'"
+                >
+                  <template #right-icon>
+                    <van-radio name="1" />
+                  </template>
+                </van-cell>
+              </van-cell-group>
+              <div class="check-button" @click="onClickCheckSex">
+                确定
+              </div>
+            </van-radio-group>
+          </div>
+        </div>
+      </van-overlay>
+      <van-popup
+        v-model="item.age.show_age"
+        position="bottom"
+        :style="{ height: '45%' }"
+      >
+        <van-picker
+          title="出生年份"
+          show-toolbar
+          :columns="currentDate"
+          @confirm="onClickCheckAge"
+          @cancel="onClickCancel"
+        />
+      </van-popup>
     </div>
   </div>
 </template>
 
 <script>
 import { getBack } from "../../../../components/utils.js";
+import { getCookie } from "../../../../components/cookie.js";
+import { getMyData, editData } from "../../../API/my_API.js";
 
 export default {
   name: "myMessage",
   data() {
     return {
+      token: "",
       headerImg: require("../../../../assets/img/my/topPart/myHeader.png"),
-      name: "Saber",
-      sex: "男"
+      name: "",
+      item: {
+        sex: {
+          sex: "", //显示的性别，男/女
+          isLink_sex: true, //sex行右侧箭头
+          show_sex: false, //显示sex选择框内容
+          radio_sex: "-1" //radio绑定的选择性别,string类型，否则无法通过name来进行绑定
+        },
+        age: {
+          age: "",
+          isLink_age: true,
+          show_age: false
+        }
+      },
+      currentDate: [],
+      userData: {}
     };
   },
   methods: {
-    getBack
+    getBack,
+    getCookie,
+    judgeIFM() {
+      if (!this.userData.userName) {
+        this.name = this.userData.phone;
+      } else {
+        this.name = this.userData.userName;
+      }
+      if (this.token) {
+        this.headerImg = getCookie("headerImg");
+      }
+    },
+    judgeSex() {
+      if (this.item.sex.radio_sex === "-1") {
+        //本地进行修改后减小服务器压力，不去服务器再获取一次数据，直接调用本地数据
+        if (this.userData.sex !== null) {
+          this.item.sex.radio_sex = this.userData.sex + ""; //将number转为string
+          this.item.sex.isLink_sex = false;
+          if (this.userData.sex === 0) this.item.sex.sex = "男";
+          else this.item.sex.sex = "女";
+        }
+      } else {
+        this.item.sex.isLink_sex = false;
+        if (this.item.sex.radio_sex === "0") this.item.sex.sex = "男";
+        else this.item.sex.sex = "女";
+      }
+    },
+    onClick(data) {
+      switch (data) {
+        case "sex": {
+          this.item.sex.show_sex = true;
+          break;
+        }
+        case "age": {
+          this.item.age.show_age = true;
+          break;
+        }
+      }
+    }, //判断点击展示的弹窗
+
+    onClickCheckSex() {
+      this.item.sex.show_sex = false;
+      editData({
+        sex: parseInt(this.item.sex.radio_sex),
+        age: this.item.age.age
+      });
+    },
+
+    onClickCheckAge(val) {
+      this.item.age.show_age = false;
+      this.judgeAge(val);
+      editData({
+        sex: parseInt(this.item.sex.radio_sex),
+        age: this.item.age.age
+      });
+    }, //age点击弹出框的确定按钮
+
+    onClickCancel() {
+      this.item.age.show_age = false;
+    }, //点击弹出框的取消按钮
+
+    judgeAge(val = "") {
+      if (val) {
+        //点击确定传值后
+        this.item.age.isLink_age = false;
+        const date = new Date();
+        this.item.age.age = date.getFullYear() - val;
+        this.userData.age = this.item.age.age; //直接替换从数据库中拿来的age信息，方便updated
+      } else {
+        if (this.userData.age) {
+          //如果数据库中有年龄信息
+          this.item.age.isLink_age = false;
+          this.item.age.age = this.userData.age;
+        }
+      }
+    }, //获取年龄
+
+    onClickMyLocation() {
+      this.$router.push("/myLocation");
+    }
   },
   created() {
-    if (this.$route.query.headerImg) {
-      this.headerImg = this.$route.query.headerImg;
-      this.name = this.$route.query.name;
+    this.token = getCookie("token");
+    if (this.token !== "未找到对应cookie" && this.token !== "") {
+      getMyData().then(data => {
+        this.userData = data;
+        this.judgeIFM();
+        this.judgeSex();
+      });
     }
+    const date = new Date();
+    for (let i = date.getFullYear(); i > 1900; i--) {
+      this.currentDate.push(i);
+    }
+  },
+  updated() {
+    this.judgeSex();
+    this.judgeAge();
   }
 };
 </script>
 
 <style scoped lang="scss">
-.myMessage {
-  background-color: #f1f1f1;
-  height: 100%;
-
-  &-topPart {
-    width: 100%;
-    height: 1rem;
-    background-color: #fff;
-    display: flex;
-    font-size: initial;
-    align-items: center;
-    position: relative;
-    border-bottom: 1px solid #ededed;
-
-    &-back {
-      position: absolute;
-      height: 0.5rem;
-      width: 0.5rem;
-      margin-left: 0.2rem;
-    }
-
-    &-title {
-      margin: auto;
-    }
-  }
-
-  &-headerImg {
-    height: 2rem;
-    width: 2rem;
-    margin: 0.8rem auto;
-    border-radius: 50%;
-    overflow: hidden;
-
-    img {
-      height: 100%;
-      width: 100%;
-      object-fit: contain;
-    }
-  }
-}
+@import "myMessage";
 </style>

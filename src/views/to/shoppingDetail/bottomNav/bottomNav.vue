@@ -33,7 +33,7 @@
       </van-goods-action-icon>
       <van-goods-action-button
         text="加入购物车"
-        @click="onClickAddCart"
+        @click="onClickBuyNow"
         class="addToCart"
       />
       <van-goods-action-button
@@ -47,15 +47,26 @@
 </template>
 
 <script>
+import { getAllShoppingData } from "../../../API/all_shopping_API.js";
+import { getImgRightPath } from "../../../../components/utils.js";
+import { getSortDataThird } from "../../../API/sort_API.js";
+
 export default {
   data() {
     return {
+      id: 0,
+      secondList: 0,
+      shopping: {},
       collect: false,
       show: false,
       name: "bottomNav",
       text: ["客服", "购物车"],
       defaultIcon: ["#icon-kefu", "#icon-gouwuche"],
       routerTo: ["/customerServe", "/cart"],
+      goods: {
+        // 默认商品 sku 缩略图
+        picture: require("../../../../assets/img/to/shoppingDetail/topImg1.png")
+      },
       sku: {
         tree: [
           {
@@ -71,8 +82,8 @@ export default {
               }
             ],
             k_s: "s1"
-            // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，
-            // value 值会是从属于当前类目的一个规格值 id
+// skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，
+// value 值会是从属于当前类目的一个规格值 id
           },
           {
             k: "材质",
@@ -133,10 +144,6 @@ export default {
             stock_num: 120
           }
         ]
-      },
-      goods: {
-        // 默认商品 sku 缩略图
-        picture: require("../../../../assets/img/to/shoppingDetail/topImg1.png")
       }
     };
   },
@@ -161,10 +168,25 @@ export default {
         });
       }
     },
-    onClickAddCart() {},
     onClickBuyNow() {
       this.show = !this.show;
     }
+  },
+  created() {
+    this.id = this.$route.query.id;
+    getAllShoppingData(this.id)
+      .then(data => {
+        this.shopping = data[0];
+        this.goods.picture = getImgRightPath(this.shopping.img);
+        this.secondList = this.shopping.secondList;
+      })
+      .then(() => {
+        getSortDataThird(this.secondList).then(data => {
+          if (data) {
+            console.log('third',data.data.goodsSku);
+          }
+        });
+      });
   }
 };
 </script>

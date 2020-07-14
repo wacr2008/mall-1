@@ -1,10 +1,10 @@
-import { MY_URL_GET_DATA, MY_URL_EDIT_DATA } from "./URLs.js";
+import { MY_GET_DATA_URL, MY_EDIT_DATA_URL, ADD_POSITION_URL, GET_POSITION_URL } from "./URLs.js";
 import request from "./vender/request.js";
 import { getCookie } from "../../components/cookie.js";
 
 export function getMyData() {
   return request({
-    url: MY_URL_GET_DATA,
+    url: MY_GET_DATA_URL,
     data: {
       user: {
         userName: null,
@@ -18,22 +18,76 @@ export function getMyData() {
       token: getCookie("token")
     }
   }).then(data => {
+    console.log(data);
     return data.data.data[0];
   });
 }
 
-export function editData(signIn = false) {
-  if (signIn) {
-    return request({
-      url: MY_URL_EDIT_DATA,
-      data: {
-        user: {
-          state: 1
-        }
-      },
-      headers: {
-        token: getCookie("token")
+export function ifSignIn() {
+  return request({
+    url: MY_EDIT_DATA_URL,
+    data: {
+      user: {
+        state: 1
       }
-    });
-  }
+    },
+    headers: {
+      token: getCookie("token")
+    }
+  });
+}
+
+export function editData(data) {
+  const { sex, age } = data;
+  return request({
+    url: MY_EDIT_DATA_URL,
+    data: {
+      user: {
+        sex: sex,
+        age: age
+      }
+    },
+    headers: {
+      token: getCookie("token")
+    }
+  }).then(data => {
+    return data;
+  });
+}
+
+export function addPosition(data, token) {
+  const { name, phone, province, city, area, positionDetail } = data;
+  return request({
+    url: ADD_POSITION_URL,
+    data: {
+      userAddress: {
+        userName: name,
+        phone: phone,
+        proId: province,
+        cityId: city,
+        areaId: area,
+        detailed: positionDetail
+      }
+    },
+    headers: {
+      token: token
+    }
+  }).then(data => {
+    return data;
+  });
+}
+
+export function getMyPosition(token) {
+  return request({
+    url: GET_POSITION_URL,
+    data: {
+      page: 1,
+      limit: 10
+    },
+    headers: {
+      token: token
+    }
+  }).then(data => {
+    return data.data;
+  });
 }

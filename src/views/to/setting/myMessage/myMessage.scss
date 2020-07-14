@@ -1,0 +1,67 @@
+.myMessage {
+  background-color: #f1f1f1;
+  height: 100%;
+
+  &-topPart {
+    width: 100%;
+    height: 1rem;
+    background-color: #fff;
+    display: flex;
+    font-size: initial;
+    align-items: center;
+    position: relative;
+    border-bottom: 1px solid #ededed;
+
+    &-back {
+      position: absolute;
+      height: 0.5rem;
+      width: 0.5rem;
+      margin-left: 0.2rem;
+    }
+
+    &-title {
+      margin: auto;
+    }
+  }
+
+  &-headerImg {
+    height: 2rem;
+    width: 2rem;
+    margin: 0.8rem auto;
+    border-radius: 50%;
+    overflow: hidden;
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+    }
+  }
+
+  .van-overlay {
+    .overlay {
+      height: 100%;
+      position: relative;
+
+      .overlay-sex {
+        height: 100%;
+
+        .van-radio-group {
+          background-color: #fff;
+          width: 70%;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate3d(-50%, -50%, 0);
+
+          .sex-radio-title,.check-button{
+            border-bottom: 1px solid #9A9A9A;
+            text-align: center;
+            font-size: initial;
+            padding:0.2rem;
+          }
+        }
+      }
+    }
+  }
+}

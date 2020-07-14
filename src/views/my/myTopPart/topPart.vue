@@ -41,7 +41,7 @@
 
 <script>
 import { Toast } from "vant";
-import { getMyData, editData } from "../../API/my_API.js";
+import { getMyData, ifSignIn } from "../../API/my_API.js";
 import { getImgRightPath } from "../../../components/utils.js";
 import { getCookie } from "../../../components/cookie.js";
 
@@ -83,9 +83,11 @@ export default {
         switch (str) {
           case "签到": {
             this.bottomLine[0].text = "已签到";
-            const arr = [...document.querySelectorAll(".topPart-bottomLine-item")];
+            const arr = [
+              ...document.querySelectorAll(".topPart-bottomLine-item")
+            ];
             arr[0].style.color = "#D1D1D1";
-            editData(true);
+            ifSignIn();
             Toast.success("已签到");
             break;
           }
@@ -107,9 +109,11 @@ export default {
         }
       }
     },
+
     onClickEdit() {
       this.$router.push("/setting");
-    },
+    }, //跳转设置页面
+
     onClickMyMessage() {
       if (this.user.name === "未登录") {
         this.$router.push("/signIn");
@@ -122,27 +126,36 @@ export default {
           }
         });
       }
-    },
+    }, //跳转我的信息界面
+
     getMyData() {
       getMyData().then(data => {
         this.dataGet = data;
         console.log(this.dataGet);
-        if (data.img) {
-          this.user.headerImg = this.getImgRightPath(data.img);
+        if (!data.userName) {
+          this.user.name = data.phone;
+        } else {
           this.user.name = data.userName;
+        } //若新用户无用户名则将手机号作为用户名
+        if (this.getCookie("token")) {
           if (data.state === 1) {
             this.bottomLine[0].text = "已签到";
-            const arr = [...document.querySelectorAll(".topPart-bottomLine-item")];
+            const arr = [
+              ...document.querySelectorAll(".topPart-bottomLine-item")
+            ];
             arr[0].style.color = "#D1D1D1";
           }
+          //判断是否签到，state=1则已签到,若已签到则渲染已签到的样式
         }
       });
-    },
+    }, //获取数据
+
     getImgRightPath,
     getCookie
   },
   created() {
     if (this.getCookie("headerImg") !== "未找到对应cookie") {
+      console.log(this.getCookie("headerImg"));
       this.user.headerImg = this.getCookie("headerImg");
     }
     if (this.getCookie("token") !== "未找到对应cookie") {

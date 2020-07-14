@@ -8,7 +8,7 @@ module.exports = {
     compress: true,
     proxy: {
       "/api": {
-        target: "http://192.168.0.26:8080",
+        target: "http://localhost:8095",
         changeOrigin: true,
         pathRewrite: { "^/api/": "/" }
       }

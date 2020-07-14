@@ -1,8 +1,7 @@
-import { CART_URL_GET_DATA, CART_URL_MODIFY } from "./URLs.js";
+import { CART_URL_GET_DATA, CART_URL_MODIFY, CART_URL_ADD } from "./URLs.js";
 import request from "./vender/requestWithOther.js";
-import { token } from "./token.js";
 
-export function getCartData() {
+export function getCartData(token) {
   return request({
     url: CART_URL_GET_DATA,
     data: {
@@ -13,11 +12,11 @@ export function getCartData() {
       token: token
     }
   }).then(data => {
-    return data.data.data;
+    return data;
   });
 } //获取数据请求
 
-export function editMessage(editDataNeed) {
+export function editMessage(editDataNeed, token) {
   const { goodsId, bbs } = editDataNeed;
   return request({
     url: CART_URL_MODIFY,
@@ -34,3 +33,24 @@ export function editMessage(editDataNeed) {
     return data;
   });
 } //修改留言请求
+
+export function addShoppingToCart(data, token) {
+  const { id, attr, attrVal, price, num } = data;
+  return request({
+    url: CART_URL_ADD,
+    data: {
+      chooseGoods: {
+        goodsId: id,
+        goodsAttr: attr,
+        goodsAttrVal: attrVal,
+        price: price,
+        num: num
+      }
+    },
+    headers: {
+      token: token
+    }
+  }).then(data => {
+    return data;
+  });
+}
