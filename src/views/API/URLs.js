@@ -41,6 +41,7 @@ export const ADD_POSITION_URL = "./api/testdemo/user/adduseraddress.action"; //�
 
 export const GET_POSITION_URL = "./api/testdemo/user/seluseraddress.action"; //查询收货地址
 
+export const UPLOAD_IMG_URL = "./api/testdemo/upload/uploadimg.action"; //上传图片
 /** 登录页面URL **/
 export const SING_IN_URL = "./api/testdemo/user/login.action"; //登录
 

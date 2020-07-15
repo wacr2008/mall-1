@@ -69,7 +69,6 @@ export default {
       let i = 0;
       this.sportItemId.forEach(e => {
         getSortDataThird(e).then(data => {
-          console.log(data);
           const goods = data.data.goods;
           if (goods) {
             goods.forEach(e => {

@@ -9,7 +9,7 @@
       <div class="myMessage-topPart-title">个人信息</div>
     </div>
     <div class="myMessage-headerImg">
-      <img :src="headerImg" alt="err" />
+      <van-uploader :after-read="afterRead" v-model="fileList" />
     </div>
     <div class="myMessage-otherIFM">
       <van-cell-group>
@@ -87,7 +87,7 @@
 <script>
 import { getBack } from "../../../../components/utils.js";
 import { getCookie } from "../../../../components/cookie.js";
-import { getMyData, editData } from "../../../API/my_API.js";
+import { getMyData, editData, upLodeImg } from "../../../API/my_API.js";
 
 export default {
   name: "myMessage",
@@ -95,6 +95,7 @@ export default {
     return {
       token: "",
       headerImg: require("../../../../assets/img/my/topPart/myHeader.png"),
+      fileList: [],
       name: "",
       item: {
         sex: {
@@ -124,6 +125,8 @@ export default {
       }
       if (this.token) {
         this.headerImg = getCookie("headerImg");
+        this.fileList = [];
+        this.fileList.push({ url: getCookie("headerImg") });
       }
     },
     judgeSex() {
@@ -193,6 +196,12 @@ export default {
 
     onClickMyLocation() {
       this.$router.push("/myLocation");
+    },
+
+    afterRead(file) {
+      console.log(file);
+      this.fileList.splice(0, 1);
+      upLodeImg(file).then(data => console.log(data));
     }
   },
   created() {

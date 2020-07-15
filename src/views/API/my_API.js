@@ -1,4 +1,10 @@
-import { MY_GET_DATA_URL, MY_EDIT_DATA_URL, ADD_POSITION_URL, GET_POSITION_URL } from "./URLs.js";
+import {
+  MY_GET_DATA_URL,
+  MY_EDIT_DATA_URL,
+  ADD_POSITION_URL,
+  GET_POSITION_URL,
+  UPLOAD_IMG_URL
+} from "./URLs.js";
 import request from "./vender/request.js";
 import { getCookie } from "../../components/cookie.js";
 
@@ -89,5 +95,16 @@ export function getMyPosition(token) {
     }
   }).then(data => {
     return data.data;
+  });
+}
+
+export function upLodeImg(data) {
+  return request({
+    url: UPLOAD_IMG_URL,
+    data: {
+      file: data
+    }
+  }).then(data => {
+    return data;
   });
 }

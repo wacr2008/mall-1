@@ -4,7 +4,7 @@
       <div class="myOrder-topLine-text">
         我的订单
       </div>
-      <button class="myOrder-topLine-button">
+      <button class="myOrder-topLine-button" @click="onClickMyOrder">
         查看全部订单>
       </button>
     </div>
@@ -46,6 +46,11 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    onClickMyOrder() {
+      this.$router.push("/order");
+    }
   }
 };
 </script>
