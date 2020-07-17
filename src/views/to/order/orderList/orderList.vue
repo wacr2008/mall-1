@@ -9,25 +9,41 @@
       </div>
     </div>
     <div class="orderList-item" v-if="num !== 0">
-      <div class="div-space"></div>
       <div class="orderList-title" v-if="page === 0 || page === 1">
-        111111
+        <orderItem :shopping="shopping" num="1" />
       </div>
       <div class="orderList-title" v-if="page === 0 || page === 2">
-        222222
+        <orderItem :shopping="shopping" num="2" />
+      </div>
+      <div class="orderList-title" v-if="page === 0 || page === 3">
+        <orderItem :shopping="shopping" num="3" />
+      </div>
+      <div class="orderList-title" v-if="page === 0 || page === 4">
+        <orderItem :shopping="shopping" num="4" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import orderItem from "../../../../components/orderItem.vue";
 export default {
+  components: { orderItem },
   name: "orderList",
   data() {
     return {
       page: 0, //第N页
       num: 1, //当页的数据量
-      emptyImg: require("../../../../assets/img/to/order/emptyOrder.png")
+      emptyImg: require("../../../../assets/img/to/order/emptyOrder.png"),
+      shopping: {
+        img: require("../../../../assets/img/to/shoppingDetail/topImg1.png"),
+        goodsName: "伊布",
+        goodsAttr: "属性：",
+        goodsAttrVal: "普通系",
+        color: "yellow",
+        price: 9999,
+        num: 2
+      }
     };
   },
 

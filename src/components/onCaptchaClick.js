@@ -15,6 +15,7 @@ export function onCaptchaClick(phone, settingTime = 10) {
   }, 1000);
   sendSMS(phone).then(data => {
     if (data.msg === "发送成功") {
+      console.log(data);
       return data.sendcode;
     }
   });

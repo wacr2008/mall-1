@@ -42,6 +42,7 @@ export const ADD_POSITION_URL = "./api/testdemo/user/adduseraddress.action"; //�
 export const GET_POSITION_URL = "./api/testdemo/user/seluseraddress.action"; //查询收货地址
 
 export const UPLOAD_IMG_URL = "./api/testdemo/upload/uploadimg.action"; //上传图片
+
 /** 登录页面URL **/
 export const SING_IN_URL = "./api/testdemo/user/login.action"; //登录
 
@@ -49,3 +50,8 @@ export const REGISTER_URL = "./api/testdemo/user/register.action"; //注册
 
 export const SENDSMS_URL = "./api/testdemo/sms/sendSMS.action"; //发送验证码
 
+/** 订单数据 **/
+export const GET_ORDER_URL = "./api/testdemo/pay/alisel.action"; //获取订单
+
+export const GET_ORDER_STATE =
+  "./api/testdemo/kdniao/find.action?tradeNo=1591078463832817282"; //查询物流状态

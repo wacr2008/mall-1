@@ -132,8 +132,8 @@ export default {
       logoImg: require("../../assets/img/signIn/logo.png"),
       username: "",
       password: "",
-      captcha: "",
-      recommend: "",
+      captcha: "", //验证码
+      recommend: "", //邀请码
       ifClick: false, //判断是否可以发送验证码
       clickMessage: "获取验证码"
     };

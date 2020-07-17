@@ -1,7 +1,7 @@
 <template>
   <div class="myOrder">
     <div class="myOrder-topPart">
-      <button class="myOrder-topPart-back" @click="getBack">
+      <button class="myOrder-topPart-back" @click="getBackToMy">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-back"></use>
         </svg>
@@ -9,13 +9,12 @@
       <div class="myOrder-topPart-title">我的订单</div>
     </div>
     <div class="myOrder-nav">
-      <van-tabs v-model="active" swipeable>
+      <van-tabs v-model="active" swipeable @change="onClickTab">
         <van-tab
           v-for="(tab, index) in tabs"
           :key="index"
           :title="tab.title"
-          replace
-          @click="onClickTab(tab.page)"
+          :name="tab.page"
         >
           <router-view />
         </van-tab>
@@ -25,7 +24,8 @@
 </template>
 
 <script>
-import { getBack } from "../../../components/utils.js";
+import { getOrderData } from "../../API/order_API.js";
+import { getCookie } from "../../../components/cookie.js";
 
 export default {
   name: "myOrder",
@@ -42,19 +42,26 @@ export default {
     };
   },
   methods: {
-    getBack,
-    onClickTab(page) {
+    getBackToMy() {
+      this.$router.push("/my");
+    },
+    onClickTab(name) {
       this.$router.push({
         path: "/order",
-        query: { num: page }
+        query: { num: name }
       });
-      console.log(page);
     }
   },
   created() {
+    if (getCookie("token") && getCookie("token") !== "未找到对应cookie") {
+      getOrderData(getCookie("token")).then(data => console.log(data));
+    }
+    if (this.$route.query.num || this.$route.query.num === 0) {
+      this.active = this.$route.query.num;
+    }
     this.$router.push({
       path: "/order",
-      query: { num: 0 }
+      query: { num: this.active }
     });
   }
 };
@@ -90,6 +97,19 @@ export default {
     /deep/.van-tab {
       flex: 0;
       -webkit-flex: 0;
+    }
+  }
+
+  .myOrder-nav {
+    height: 100%;
+
+    .van-tabs {
+      height: 100%;
+
+      /deep/.van-tabs__content {
+        height: calc(100% - 44px - 1rem);
+        overflow-y: auto;
+      }
     }
   }
 }

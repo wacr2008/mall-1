@@ -10,7 +10,11 @@
     </div>
     <div class="myOrder-order">
       <van-grid>
-        <van-grid-item v-for="(item, index) in order" :key="index">
+        <van-grid-item
+          v-for="(item, index) in order"
+          :key="index"
+          @click="onClickMyOrderItem(index)"
+        >
           <div class="myOrder-order-item-img">
             <img :src="item.img" alt="err" />
           </div>
@@ -50,6 +54,14 @@ export default {
   methods: {
     onClickMyOrder() {
       this.$router.push("/order");
+    },
+    onClickMyOrderItem(index) {
+      this.$router.push({
+        path: "/order",
+        query: {
+          num: index + 1
+        }
+      });
     }
   }
 };
