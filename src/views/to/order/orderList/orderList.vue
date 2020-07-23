@@ -10,16 +10,16 @@
     </div>
     <div class="orderList-item" v-if="num !== 0">
       <div class="orderList-title" v-if="page === 0 || page === 1">
-        <orderItem :shopping="shopping" num="1" />
+        <orderItem :shopping="shopping" topState="1" bottomState="1" />
       </div>
       <div class="orderList-title" v-if="page === 0 || page === 2">
-        <orderItem :shopping="shopping" num="2" />
+        <orderItem :shopping="shopping" topState="2" bottomState="2" />
       </div>
       <div class="orderList-title" v-if="page === 0 || page === 3">
-        <orderItem :shopping="shopping" num="3" />
+        <orderItem :shopping="shopping" topState="3" bottomState="3" />
       </div>
       <div class="orderList-title" v-if="page === 0 || page === 4">
-        <orderItem :shopping="shopping" num="4" />
+        <orderItem :shopping="shopping" topState="4" bottomState="4" />
       </div>
     </div>
   </div>
@@ -27,6 +27,9 @@
 
 <script>
 import orderItem from "../../../../components/orderItem.vue";
+import { getOrderData } from "../../../API/order_API.js";
+import { getCookie } from "../../../../components/cookie.js";
+
 export default {
   components: { orderItem },
   name: "orderList",
@@ -50,8 +53,14 @@ export default {
   created() {
     if (this.$route.query.num || this.$route.query.num === 0) {
       // 0 是false值，要单独判断
+      //传入的num就是这个页面的第几页（page），和这里的num不一样，这里的num指商品数目
       this.page = this.$route.query.num;
       // console.log(this.page);
+      if (getCookie("token") !== "未找到对应cookie") {
+        getOrderData(getCookie("token")).then(() => {
+          // console.log(data);
+        });
+      }
     }
   }
 };

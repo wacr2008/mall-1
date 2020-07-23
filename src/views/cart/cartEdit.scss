@@ -1,4 +1,6 @@
 .cartEdit{
+  height: 100%;
+
   header{
     width: 100%;
     height:1rem;
@@ -28,6 +30,8 @@
 
   &-contain{
     letter-spacing: 1px;
+    overflow-y: auto;
+    height:calc(100% - 1.8rem);
 
     .cartEdit-item{
       height:4.2rem;

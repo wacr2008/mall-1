@@ -54,7 +54,7 @@ export default {
   },
   created() {
     if (getCookie("token") && getCookie("token") !== "未找到对应cookie") {
-      getOrderData(getCookie("token")).then(data => console.log(data));
+      getOrderData(getCookie("token"));
     }
     if (this.$route.query.num || this.$route.query.num === 0) {
       this.active = this.$route.query.num;

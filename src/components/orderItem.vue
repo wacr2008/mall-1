@@ -5,16 +5,16 @@
       <div class="order-item-title-name">
         {{ shopping.goodsName }}
       </div>
-      <div class="order-item-title-waitingPay" v-if="num === '1'">
+      <div class="order-item-title-waitingPay" v-if="topState === '1'">
         等待买家付款
       </div>
-      <div class="order-item-title-waitingSend" v-if="num === '2'">
+      <div class="order-item-title-waitingSend" v-if="topState === '2'">
         待发货
       </div>
-      <div class="order-item-title-waitingArrive" v-if="num === '3'">
+      <div class="order-item-title-waitingArrive" v-if="topState === '3'">
         卖家已发货
       </div>
-      <div class="order-item-title-waitingRecommend" v-if="num === '4'">
+      <div class="order-item-title-waitingRecommend" v-if="topState === '4'">
         待评价
       </div>
     </div>
@@ -51,45 +51,45 @@
         合计： ￥{{ shopping.price * shopping.num }}
       </div>
     </div>
-    <div class="order-item-contain-buttons">
+    <div class="order-item-contain-buttons" v-if="topState !== '0'">
       <div
         class="order-item-contain-buttons-define"
-        v-if="num === '1'"
+        v-if="bottomState === '1'"
         @click="onClickCancelOrder"
       >
         取消订单
       </div>
       <div
         class="order-item-contain-buttons-pay"
-        v-if="num === '1'"
+        v-if="bottomState === '1'"
         @click="onClickPay"
       >
         付款
       </div>
       <div
         class="order-item-contain-buttons-remind"
-        v-if="num === '2'"
+        v-if="bottomState === '2'"
         @click="onClickRemind"
       >
         提醒发货
       </div>
       <div
         class="order-item-contain-buttons-findWay"
-        v-if="num === '3'"
+        v-if="bottomState === '3'"
         @click="onClickFindWay"
       >
         查看物流
       </div>
       <div
         class="order-item-contain-buttons-checkGet"
-        v-if="num === '3'"
+        v-if="bottomState === '3'"
         @click="onClickCheckGet"
       >
         确认收货
       </div>
       <div
         class="order-item-contain-buttons-recommend"
-        v-if="num === '4'"
+        v-if="bottomState === '4'"
         @click="onClickRecommend"
       >
         评价
@@ -126,14 +126,17 @@ export default {
   },
   props: {
     shopping: {},
-    num: String
+    topState: String,
+    //顶部显示判断
+    bottomState: String
+    //底部显示判断
   },
   methods: {
     onClickCancelOrder() {
       this.show = true;
     },
     onClickPay() {
-      console.log("付款");
+      this.$router.push("/waitingPay");
     },
     onClickRemind() {
       Toast("提醒已发送给卖家");
@@ -151,7 +154,14 @@ export default {
       this.show = false;
     },
     onClickOrderDetail() {
-      this.$router.push("/orderDetail");
+      if (this.topState !== "0") {
+        this.$router.push({
+          path: "/orderDetail",
+          query: {
+            bottomState: this.bottomState
+          }
+        });
+      }
     }
   }
 };
@@ -159,7 +169,6 @@ export default {
 
 <style scoped lang="scss">
 .order-item {
-  height: 5rem;
   width: 100%;
   background-color: #fff;
 
@@ -244,6 +253,7 @@ export default {
       justify-content: flex-end;
       font-size: initial;
       border-bottom: 1px solid #e9e9e9;
+      height: 0.7rem;
 
       &-num,
       &-price {

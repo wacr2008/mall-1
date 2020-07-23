@@ -53,7 +53,7 @@ export default {
 
 <style scoped lang="scss">
 .feedBack {
-  .feedBack-topPart {
+  &-topPart {
     width: 100%;
     height: 1rem;
     background-color: #fff;

@@ -1,4 +1,9 @@
-import { CART_URL_GET_DATA, CART_URL_MODIFY, CART_URL_ADD } from "./URLs.js";
+import {
+  CART_URL_GET_DATA,
+  CART_URL_MODIFY,
+  CART_URL_ADD,
+  CART_REMOVE_URL
+} from "./URLs.js";
 import request from "./vender/requestWithOther.js";
 
 export function getCartData(token) {
@@ -52,5 +57,32 @@ export function addShoppingToCart(data, token) {
     }
   }).then(data => {
     return data;
+  });
+}
+
+export function removeShoppingFromCart(id, token) {
+  return request({
+    url: CART_REMOVE_URL,
+    data: {
+      ids: id
+    },
+    headers: {
+      token: token
+    }
+  });
+}
+
+export function modifyShoppingMessage(id, num, token) {
+  return request({
+    url: CART_URL_MODIFY,
+    data: {
+      chooseGoods: {
+        goodsId: id,
+        num: num
+      }
+    },
+    headers: {
+      token: token
+    }
   });
 }

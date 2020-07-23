@@ -97,6 +97,8 @@
 <script>
 import { checkAll, checkTrueAll } from "../../components/checkRound.js";
 import { getBack } from "../../components/utils.js";
+import {modifyShoppingMessage, removeShoppingFromCart} from "../API/cart_API";
+import { getCookie } from "../../components/cookie.js";
 
 export default {
   name: "cartEdit",
@@ -116,7 +118,19 @@ export default {
   },
   methods: {
     onClickFinish() {
-      this.$router.push("/cart");
+      this.shopping.forEach((e, i) => {
+        if (e.num !== 0 && e.num !== this.shopping_step_num[i]) {
+          modifyShoppingMessage(
+            e.goodsId,
+            this.shopping_step_num[i],
+            this.token
+          ).then(() => {
+            this.$router.push("/cart");
+          });
+        } else {
+          this.$router.push("/cart");
+        }
+      });
     },
     fromCheckAll() {
       checkAll(this.$refs.checkboxGroup);
@@ -131,6 +145,9 @@ export default {
 
     onClickDelete() {
       this.checked.forEach(e => {
+        removeShoppingFromCart(this.shopping[e].id, this.token).then(data =>
+          console.log(data)
+        );
         this.shopping[e].num = 0;
         this.num--;
       }); //删除选择的商品
@@ -143,6 +160,9 @@ export default {
     this.shopping.forEach((e, i) => {
       this.shopping_step_num[i] = e.num;
     });
+    if (getCookie("token") !== "未找到对应cookie") {
+      this.token = getCookie("token");
+    }
   },
   updated() {
     this.fromCheckTrueAll();

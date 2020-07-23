@@ -13,7 +13,7 @@
     </div>
     <div class="myMessage-otherIFM">
       <van-cell-group>
-        <van-cell title="昵称" :value="name" />
+        <van-cell title="昵称" :value="name" @click="onClickChangeName" />
         <van-cell
           title="性别"
           :is-link="item.sex.isLink_sex"
@@ -80,6 +80,26 @@
           @cancel="onClickCancel"
         />
       </van-popup>
+      <van-overlay :show="show_name" @click="show_name = false">
+        <div class="overlay-name" @click.stop>
+          <van-cell-group>
+            <div class="overlay-name-tips van-hairline--bottom">
+              请在下方输入您的昵称：
+            </div>
+            <div class="overlay-name-input">
+              <van-field v-model="nameChange" />
+            </div>
+            <div class="overlay-name-button">
+              <van-button type="default" class="left" @click="onClickNameCheck">
+                确认
+              </van-button>
+              <van-button type="default" @click="onClickNameDefine">
+                取消
+              </van-button>
+            </div>
+          </van-cell-group>
+        </div>
+      </van-overlay>
     </div>
   </div>
 </template>
@@ -97,6 +117,7 @@ export default {
       headerImg: require("../../../../assets/img/my/topPart/myHeader.png"),
       fileList: [],
       name: "",
+      nameChange: "",
       item: {
         sex: {
           sex: "", //显示的性别，男/女
@@ -107,11 +128,12 @@ export default {
         age: {
           age: "",
           isLink_age: true,
-          show_age: false
+          show_age: false //age弹窗
         }
       },
-      currentDate: [],
-      userData: {}
+      currentDate: [], //可供用户修改的年龄选择范围，1900-？
+      userData: {}, //用户信息，将获取的用户信息存入这里
+      show_name: false //修改姓名弹窗
     };
   },
   methods: {
@@ -160,6 +182,7 @@ export default {
     onClickCheckSex() {
       this.item.sex.show_sex = false;
       editData({
+        name: this.name,
         sex: parseInt(this.item.sex.radio_sex),
         age: this.item.age.age
       });
@@ -169,6 +192,7 @@ export default {
       this.item.age.show_age = false;
       this.judgeAge(val);
       editData({
+        name: this.name,
         sex: parseInt(this.item.sex.radio_sex),
         age: this.item.age.age
       });
@@ -202,6 +226,23 @@ export default {
       console.log(file);
       this.fileList.splice(0, 1);
       upLodeImg(file).then(data => console.log(data));
+    },
+
+    onClickChangeName() {
+      this.show_name = true;
+    },
+    onClickNameDefine() {
+      this.show_name = false;
+    },
+    onClickNameCheck() {
+      this.show_name = false;
+      this.name = this.nameChange;
+      this.nameChange = "";
+      editData({
+        name: this.name,
+        sex: parseInt(this.item.sex.radio_sex),
+        age: this.item.age.age
+      });
     }
   },
   created() {

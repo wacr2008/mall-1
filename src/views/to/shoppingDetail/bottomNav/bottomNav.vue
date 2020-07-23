@@ -41,15 +41,30 @@
         text="立即购买"
         @click="onClickBuyNow"
       />
-      <van-sku v-model="show" :sku="sku" :goods="goods" />
+      <van-sku
+        v-model="show"
+        :sku="sku"
+        :goods="goods"
+        :goods-id="id"
+        @add-cart="onClickAddToCart"
+      />
     </van-goods-action>
   </div>
 </template>
 
 <script>
-import { getAllShoppingData } from "../../../API/all_shopping_API.js";
-import { getImgRightPath } from "../../../../components/utils.js";
-import { getSortDataThird } from "../../../API/sort_API.js";
+import {
+  getAllShoppingData,
+  getShoppingSku
+} from "../../../API/all_shopping_API.js";
+import { addShoppingToCart } from "../../../API/cart_API.js";
+import {
+  getImgRightPath,
+  deduplication
+} from "../../../../components/utils.js";
+import { getName, listToSku } from "./listToSku.js";
+import { getCookie } from "../../../../components/cookie.js";
+import {Toast} from "vant"
 
 export default {
   data() {
@@ -68,83 +83,11 @@ export default {
         picture: require("../../../../assets/img/to/shoppingDetail/topImg1.png")
       },
       sku: {
-        tree: [
-          {
-            k: "尺寸",
-            v: [
-              {
-                id: "30349", // skuValueId：规格值 id
-                name: "150*40*45cm" // skuValueName：规格值名称
-              },
-              {
-                id: "1215",
-                name: "150*40*65cm"
-              }
-            ],
-            k_s: "s1"
-// skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，
-// value 值会是从属于当前类目的一个规格值 id
-          },
-          {
-            k: "材质",
-            v: [
-              {
-                id: "1111",
-                name: "白橡木"
-              }
-            ],
-            k_s: "s2"
-          },
-          {
-            k: "颜色",
-            v: [
-              {
-                id: "777",
-                name: "胡桃色"
-              },
-              {
-                id: "778",
-                name: "原木色"
-              }
-            ],
-            k_s: "s3"
-          }
-        ],
-        list: [
-          {
-            id: 2259, // skuId，下单时后端需要
-            price: 630000, // 价格（单位分）
-            s1: "1215", // 规格类目 k_s 为 s1 的对应规格值 id
-            s2: "1111",
-            s3: "777",
-            stock_num: 110 // 当前 sku 组合对应的库存
-          },
-          {
-            id: 1000,
-            price: 625000,
-            s1: "30349",
-            s2: "1111",
-            s3: "777",
-            stock_num: 100
-          },
-          {
-            id: 2260,
-            price: 630000,
-            s1: "1215",
-            s2: "1111",
-            s3: "778",
-            stock_num: 115
-          },
-          {
-            id: 1100,
-            price: 625000,
-            s1: "30349",
-            s2: "1111",
-            s3: "778",
-            stock_num: 120
-          }
-        ]
-      }
+        tree: [],
+        list: []
+      },
+      idArr: [],
+      valArr: []
     };
   },
   methods: {
@@ -170,6 +113,38 @@ export default {
     },
     onClickBuyNow() {
       this.show = !this.show;
+    },
+    showList(data) {
+      data.forEach(e => {
+        let sId = e.goodsAttrIds.split(",");
+        const id = e.id; // skuId，下单时后端需要
+        const price = e.price; // 价格（单位分）
+        let s1 = ""; // 规格类目 k_s 为 s1 的对应规格值 id
+        let s2 = "";
+        const stock_num = e.stock; // 当前 sku 组合对应的库存
+        s1 = sId[0];
+        s2 = sId[1];
+        this.sku.list.push({
+          id: id,
+          price: price,
+          s1: s1,
+          s2: s2,
+          stock_num: stock_num
+        });
+      });
+    },
+    onClickAddToCart(data) {
+      const cartData = {
+        id: data.goodsId,
+        attr: getName(this.idArr, this.valArr, data.selectedSkuComb.s1),
+        attrVal: getName(this.idArr, this.valArr, data.selectedSkuComb.s2),
+        price: data.selectedSkuComb.price / 100,
+        num: data.selectedNum
+      };
+      if (getCookie("token") !== "未找到对应cookie") {
+        addShoppingToCart(cartData, getCookie("token")).then(data => data);
+        Toast.success("添加成功");
+      }
     }
   },
   created() {
@@ -181,10 +156,23 @@ export default {
         this.secondList = this.shopping.secondList;
       })
       .then(() => {
-        getSortDataThird(this.secondList).then(data => {
-          if (data) {
-            console.log('third',data.data.goodsSku);
-          }
+        getShoppingSku(this.id).then(data => {
+          this.sku.tree = listToSku(data);
+          this.showList(data);
+          let tempId = [];
+          let tempVal = [];
+          data.forEach(e => {
+            tempId.push(e.goodsAttrIds.split(","));
+            tempVal.push(e.goodsAttrVals.split(","));
+          });
+          tempId.forEach(e => {
+            this.idArr = this.idArr.concat(e);
+          });
+          tempVal.forEach(e => {
+            this.valArr = this.valArr.concat(e);
+          });
+          this.idArr = deduplication(this.idArr);
+          this.valArr = deduplication(this.valArr);
         });
       });
   }

@@ -1,0 +1,167 @@
+.orderDetail {
+  height: 100%;
+  background-color: #f1f1f1;
+  position: relative;
+
+  &-topPart {
+    width: 100%;
+    height: 1rem;
+    background-color: #fff;
+    display: flex;
+    font-size: initial;
+    align-items: center;
+    position: relative;
+    border-bottom: 1px solid #ececec;
+
+    &-back {
+      position: absolute;
+      height: 0.5rem;
+      width: 0.5rem;
+      margin-left: 0.2rem;
+    }
+
+    &-title {
+      margin: auto;
+    }
+  }
+
+  &-contain {
+    width: 100%;
+    height: calc(100% - 2rem); /*去掉头部1rem和底部1rem*/
+
+    &-state {
+      width: 100%;
+      background-color: #fff;
+      font-size: initial;
+      display: flex;
+      align-items: center;
+      word-break: break-all;
+
+      &-text {
+        margin: 0.2rem 0 0.2rem 0.2rem;
+      }
+
+      &-more {
+        margin: 0 0.3rem 0 auto;
+        color: #a2a2a2;
+      }
+    }
+    &-receiver {
+      width: 100%;
+      background-color: #fff;
+      padding: 0.2rem 0.3rem;
+
+      &-firstLine {
+        margin-left: 0.4rem;
+        font-size: initial;
+
+        &-name {
+          margin-right: 0.2rem;
+        }
+      }
+
+      &-secondLine {
+        display: flex;
+        margin-top: 0.2rem;
+        color: #9e9e9e;
+        letter-spacing: 0.04rem; /*字间距*/
+
+        &-img {
+          display: block;
+          height: 0.3rem;
+          width: 0.3rem;
+          margin-right: 0.1rem;
+
+          img {
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+          }
+        }
+      }
+    }
+
+    &-orderID {
+      height: 0.7rem;
+      background-color: #fff;
+      font-size: initial;
+      line-height: 0.7rem;
+      padding: 0 0.3rem;
+      color: #999999;
+    }
+  }
+  &-bottomLine {
+    height: 1rem;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    display: flex;
+    width: 100%;
+
+    .van-button {
+      height: 100%;
+      line-height: 0;
+      margin-left: auto;
+      width: 2rem;
+    }
+
+    .van-button--default {
+      border: 1px solid #e7e7e7;
+    }
+
+    &-waitingPay,
+    &-waitingSend,
+    &-sending,
+    &-alreadyGet {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      margin-left: 0.3rem;
+      font-size: initial;
+
+      &-total {
+        margin-left: 0.1rem;
+        color: #d62323;
+      }
+
+      &-button {
+        height: 100%;
+        margin-left: auto;
+      }
+    }
+  }
+  .wrapper {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .block {
+      width: 4rem;
+      height: 2.4rem;
+      background-color: #fff;
+      text-align: center;
+
+      &-title,
+      &-contain,
+      &-button {
+        height: 0.8rem;
+        line-height: 0.8rem;
+        border-bottom: 1px solid #f6f6f6;
+      }
+
+      &-button {
+        display: flex;
+
+        button {
+          width: 50%;
+        }
+
+        .check {
+          border-right: 1px solid #f6f6f6;
+        }
+      }
+    }
+  }
+}

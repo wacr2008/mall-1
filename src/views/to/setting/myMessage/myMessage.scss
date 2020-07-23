@@ -92,5 +92,37 @@
         }
       }
     }
+
+    .overlay-name {
+      height: 100%;
+      position: relative;
+
+      .van-cell-group {
+        position: absolute;
+        top:50%;
+        left: 50%;
+        transform: translate3d(-50%,-50%,0);
+        width: 60%;
+
+        .overlay-name-tips {
+          height: 0.8rem;
+          line-height: 0.8rem;
+          padding: 0 0.2rem;
+          font-size: initial;
+        }
+
+        .overlay-name-button {
+          width: 100%;
+
+          .van-button{
+            width: 50%;
+          }
+
+          .left {
+            color:red;
+          }
+        }
+      }
+    }
   }
 }
