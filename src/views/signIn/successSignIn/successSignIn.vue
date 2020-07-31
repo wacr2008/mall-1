@@ -36,7 +36,7 @@ export default {
   methods: {
     autoJump() {
       setTimeout(() => {
-        this.$router.push("/my").catch(() => {});
+        this.$router.push("/my");
       }, 2000);
     },
     getMyData,
@@ -48,7 +48,7 @@ export default {
       if (data.img) {
         this.userImg = this.getImgRightPath(data.img);
       } else {
-        this.userImg = require("../../../assets/img/my/topPart/myHeader.png");
+        this.userImg = require("../../../assets/img/signIn/defaultHeader.png");
       }
       setCookie("headerImg", this.userImg);
     });
@@ -62,13 +62,13 @@ export default {
     height: 2rem;
     width: 2rem;
     margin: 4rem auto 0 auto;
-    border-radius: 50%;
     overflow: hidden;
+    border-radius: 50%;
 
     img {
       height: 100%;
       width: 100%;
-      object-fit: contain;
+      object-fit: cover;
       overflow: hidden;
     }
   }

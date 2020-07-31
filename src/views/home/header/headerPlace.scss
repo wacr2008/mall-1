@@ -10,7 +10,7 @@ header {
   top:0;
   left:0;
   width: 100%;
-  z-index:1;
+  z-index:999; /* 要高于组件自带的宫格的边框，否则会有细线 */
   background-color: #fff;
 
   .header-place {
@@ -21,9 +21,15 @@ header {
     font-size: medium;
     border:none;
     height:1rem;
+    padding: 0 0 0 0.1rem;
+
+    .van-button__content{
+      width: 100%;
+    }
 
     .van-button__text{
       display: flex;
+      width: 100%;
 
       .header-place-moreImg {
         width: 0.2rem;
@@ -37,6 +43,12 @@ header {
           object-fit: contain;
         }
       }
+
+      .header-place-specific {
+        text-overflow:ellipsis; //超出显示...
+        overflow: hidden;
+        white-space: nowrap; //不自动换行
+      }
     }
   }
 
@@ -47,6 +59,7 @@ header {
     height: 70%;
     font-size: inherit;
     border-radius: 1rem;
+    margin-left: 0.1rem;
 
     .header-search-left {
       height: 100%;

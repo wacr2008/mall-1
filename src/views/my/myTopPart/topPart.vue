@@ -35,7 +35,6 @@
         </span>
       </div>
     </div>
-    <div class="div-space"></div>
   </div>
 </template>
 
@@ -131,7 +130,6 @@ export default {
     getMyData() {
       getMyData().then(data => {
         this.dataGet = data;
-        console.log(this.dataGet);
         if (!data.userName) {
           this.user.name = data.phone;
         } else {
@@ -155,7 +153,6 @@ export default {
   },
   created() {
     if (this.getCookie("headerImg") !== "未找到对应cookie") {
-      console.log(this.getCookie("headerImg"));
       this.user.headerImg = this.getCookie("headerImg");
     }
     if (this.getCookie("token") !== "未找到对应cookie") {

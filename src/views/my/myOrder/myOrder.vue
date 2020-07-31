@@ -22,7 +22,6 @@
         </van-grid-item>
       </van-grid>
     </div>
-    <div class="div-space"></div>
   </div>
 </template>
 

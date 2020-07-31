@@ -48,13 +48,13 @@
       </div>
     </div>
     <div class="waitingPay-payNow">
-      <van-button type="danger">立即支付</van-button>
+      <van-button type="danger" @click="onClickPay">立即支付</van-button>
     </div>
   </div>
 </template>
 
 <script>
-
+import { Toast } from "vant";
 export default {
   name: "waitingPay",
   data() {
@@ -75,6 +75,10 @@ export default {
           num: 0
         }
       });
+    },
+    onClickPay() {
+      Toast.success("支付成功");
+      this.$router.push("/my");
     }
   }
 };

@@ -32,14 +32,9 @@
         </div>
       </van-goods-action-icon>
       <van-goods-action-button
-        text="加入购物车"
-        @click="onClickBuyNow"
-        class="addToCart"
-      />
-      <van-goods-action-button
         type="danger"
-        text="立即购买"
-        @click="onClickBuyNow"
+        text="选择商品规格"
+        @click="onClickChangeShow"
       />
       <van-sku
         v-model="show"
@@ -47,6 +42,7 @@
         :goods="goods"
         :goods-id="id"
         @add-cart="onClickAddToCart"
+        @buy-clicked="onBuyClicked"
       />
     </van-goods-action>
   </div>
@@ -64,20 +60,20 @@ import {
 } from "../../../../components/utils.js";
 import { getName, listToSku } from "./listToSku.js";
 import { getCookie } from "../../../../components/cookie.js";
-import {Toast} from "vant"
+import { Toast } from "vant";
 
 export default {
   data() {
     return {
-      id: 0,
-      secondList: 0,
+      id: 0, //商品id
+      secondList: 0, //
       shopping: {},
       collect: false,
       show: false,
       name: "bottomNav",
       text: ["客服", "购物车"],
       defaultIcon: ["#icon-kefu", "#icon-gouwuche"],
-      routerTo: ["/customerServe", "/cart"],
+      routerTo: ["", "/cart"],
       goods: {
         // 默认商品 sku 缩略图
         picture: require("../../../../assets/img/to/shoppingDetail/topImg1.png")
@@ -88,32 +84,32 @@ export default {
       },
       idArr: [],
       valArr: []
-    };
+    }; //商品具体属性列表
   },
   methods: {
     onClickRouterTo(sp) {
       this.$router.push(sp);
-    },
+    }, //若以后需要添加客服界面，则可直接传入对应地址
     onClickCollect() {
       if (!this.collect) {
         this.collect = true;
-        this.$toast({
-          iconPrefix: "svg",
-          message: "已收藏",
-          icon: "#icon-shoucang1"
-        });
+        Toast.success("已收藏");
       } else {
         this.collect = false;
-        this.$toast({
-          iconPrefix: "svg",
-          message: "已取消收藏",
-          icon: "#icon-soucang"
-        });
+        Toast.success("已取消收藏");
       }
     },
-    onClickBuyNow() {
+    onClickChangeShow() {
       this.show = !this.show;
     },
+    onBuyClicked() {
+      if (getCookie("token") !== "未找到对应cookie") {
+        this.$router.push("pay");
+        this.show = !this.show; //关闭弹窗
+      } else {
+        Toast.fail("请先登录");
+      }
+    }, //跳转到支付页面
     showList(data) {
       data.forEach(e => {
         let sId = e.goodsAttrIds.split(",");
@@ -144,6 +140,9 @@ export default {
       if (getCookie("token") !== "未找到对应cookie") {
         addShoppingToCart(cartData, getCookie("token")).then(data => data);
         Toast.success("添加成功");
+        this.show = !this.show;
+      } else {
+        Toast.fail("请先登录");
       }
     }
   },

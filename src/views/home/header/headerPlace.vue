@@ -2,7 +2,7 @@
   <div class="headerPlace">
     <header>
       <van-button type="default" class="header-place" to="/position">
-        <span class="header-place-specific">杭州</span>
+        <span class="header-place-specific">{{place}}</span>
         <span class="header-place-moreImg">
           <img
             src="../../../assets/img/layout/header/rightIcon.png"
@@ -37,12 +37,18 @@ export default {
   data() {
     return {
       name: "headerPlace",
-      images: require("../../../assets/img/layout/header/cart.png")
+      images: require("../../../assets/img/layout/header/cart.png"),
+      place: "杭州市"
     };
   },
   methods: {
     gotoLink() {
       this.$router.push("/shoppingSearch");
+    }
+  },
+  created() {
+    if (this.$route.query.place) {
+      this.place = this.$route.query.place;
     }
   }
 };

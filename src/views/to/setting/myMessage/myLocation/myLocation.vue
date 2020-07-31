@@ -1,7 +1,7 @@
 <template>
   <div class="myLocation">
     <div class="myLocation-topPart">
-      <button class="myLocation-topPart-back" @click="getBack">
+      <button class="myLocation-topPart-back" @click="getBackTo">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-back"></use>
         </svg>
@@ -29,8 +29,8 @@
         class="myLocation-position-item"
         v-for="(item, index) in data"
         :key="index"
+        v-show="show[index] === true"
       >
-        <div class="div-space"></div>
         <div class="myLocation-position-item-body">
           <div class="myLocation-position-item-body-firstLine">
             <span class="myLocation-position-item-body-firstLine-name">
@@ -59,10 +59,10 @@
               <van-radio :name="index">默认收货地址</van-radio>
             </van-radio-group>
             <div class="editAndDelete">
-              <div class="edit">
+              <div class="edit" @click="onClickChangeLocation(item)">
                 编辑
               </div>
-              <div class="delete">
+              <div class="delete" @click="deletePo(item.id, index)">
                 删除
               </div>
             </div>
@@ -70,13 +70,30 @@
         </div>
       </div>
     </div>
+    <van-overlay :show="showOver" @click="showOver = false">
+      <div class="wrapper" @click.stop>
+        <!--遮罩层-->
+        <div class="block">
+          <div class="block-title">
+            提示
+          </div>
+          <div class="block-contain">
+            确定要删除地址吗？
+          </div>
+          <div class="block-button">
+            <button class="check" @click="onClickDelete">确认</button>
+            <button @click="onClickCancel">取消</button>
+          </div>
+        </div>
+      </div>
+    </van-overlay>
   </div>
 </template>
 
 <script>
-import { getBack } from "../../../../../components/utils.js";
-import { getMyPosition } from "../../../../API/my_API.js";
+import { getMyPosition, deletePosition } from "../../../../API/my_API.js";
 import { getCookie } from "../../../../../components/cookie.js";
+import Vue from "vue";
 
 export default {
   name: "myLocation",
@@ -85,125 +102,86 @@ export default {
       num: 0,
       token: "",
       data: {},
-      radio: 0
+      radio: 0,
+      show: [], //判断是否被删除
+      from: "", //来源，判断从哪个页面来到这个地址页面，方便返回
+      showOver: false, //删除确认框是否显示
+      idWaitingRemove: "", //待删除时将值存入这两个中
+      indexWaitingRemove: "" //待删除时将值存入这两个中
     };
   },
   methods: {
-    getBack,
+    getBackTo() {
+      if (this.from) {
+        this.$router.push("/pay");
+      } else {
+        this.$router.push("/myMessage");
+      }
+    }, //从from判断页面来源并直接返回，否则修改/添加数据后会返回修改/添加页面
+
     onClickAddLocation() {
-      this.$router.push("/addLocation");
-    }
+      this.$router.push({
+        path: "/addLocation",
+        query: {
+          fun: "add",
+          from: this.from
+        }
+      });
+    }, //添加地址
+
+    onClickChangeLocation(item) {
+      this.$router.push({
+        path: "/addLocation",
+        query: {
+          fun: "change",
+          data: item,
+          from: this.from
+        }
+      });
+    }, //修改地址
+
+    onClickCancel() {
+      this.showOver = !this.showOver;
+    },
+
+    onClickDelete() {
+      const sId = this.idWaitingRemove + ""; //后端接收string类型参数，因此要转为string
+      deletePosition(sId, this.token);
+      Vue.set(this.show, this.indexWaitingRemove, false); //Vue 无法监听数组内元素的变化
+      this.num--;
+      this.onClickCancel();
+    },
+
+    deletePo(id, index) {
+      this.idWaitingRemove = "";
+      this.indexWaitingRemove = ""; //将这两个值初始化
+      this.onClickCancel();
+      this.idWaitingRemove = id;
+      this.indexWaitingRemove = index;
+    } //删除地址
   },
   created() {
     if (getCookie("token") !== "未找到对应cookie")
       this.token = getCookie("token");
+    if (this.$route.query.from) {
+      this.from = this.$route.query.from;
+    }
     getMyPosition(this.token).then(data => {
-      console.log(data);
-      this.num = data.count;
-      this.data = data.data;
+      //后端设置数据库内没有值默认返回查询失败...
+      if (data.msg === "查询失败") {
+        this.num = 0;
+      } else {
+        this.num = data.count;
+        this.data = data.data;
+        this.data.forEach(() => {
+          this.show.push(true);
+        });
+      }
     });
   }
 };
 </script>
 
 <style scoped lang="scss">
-.myLocation {
-  background-color: #f1f1f1;
-  height: 100%;
-
-  &-topPart {
-    width: 100%;
-    height: 1rem;
-    background-color: #fff;
-    display: flex;
-    font-size: initial;
-    align-items: center;
-    position: relative;
-    border-bottom: 1px solid #ededed;
-
-    &-back {
-      position: absolute;
-      height: 0.5rem;
-      width: 0.5rem;
-      margin-left: 0.2rem;
-    }
-
-    &-title {
-      margin: auto;
-    }
-
-    &-add {
-      position: absolute;
-      width: 0.3rem;
-      right: 0;
-      margin-right: 0.3rem;
-
-      svg {
-        width: 100%;
-        object-fit: contain;
-      }
-    }
-  }
-
-  &-noPosition {
-    height: 3rem;
-    text-align: center;
-    margin-top: 2rem;
-
-    &-img {
-      height: 100%;
-
-      img {
-        height: 100%;
-        object-fit: contain;
-      }
-    }
-
-    &-text {
-      color: #9c9c9c;
-      font-size: initial;
-      margin-top: 0.5rem;
-    }
-  }
-
-  &-position {
-    &-item {
-      background-color: #fff;
-
-      &-body {
-        height: 1.9rem;
-
-        &-thirdLine {
-          display: flex;
-
-          .editAndDelete {
-            margin-left: auto;
-            display: flex;
-
-            .edit,
-            .delete {
-              margin-right: 0.1rem;
-            }
-          }
-        }
-        &-thirdLine,
-        &-firstLine {
-          margin: 0.2rem 0 0.2rem 0.2rem;
-          height: 0.4rem;
-        }
-
-        &-firstLine {
-          &-phone {
-            margin-left: 0.5rem;
-          }
-        }
-
-        &-secondLine {
-          margin: 0.2rem 0 0.2rem 0.2rem;
-          height: 0.6rem;
-        }
-      }
-    }
-  }
-}
+@import "myLocation";
 </style>

@@ -3,7 +3,9 @@ import {
   MY_EDIT_DATA_URL,
   ADD_POSITION_URL,
   GET_POSITION_URL,
-  UPLOAD_IMG_URL
+  UPLOAD_IMG_URL,
+  DELETE_POSITION_URL,
+  CHANGE_POSITION_URL
 } from "./URLs.js";
 import request from "./vender/request.js";
 import { getCookie } from "../../components/cookie.js";
@@ -24,10 +26,9 @@ export function getMyData() {
       token: getCookie("token")
     }
   }).then(data => {
-    console.log(data);
     return data.data.data[0];
   });
-}
+} //获取我的页面信息
 
 export function ifSignIn() {
   return request({
@@ -41,14 +42,15 @@ export function ifSignIn() {
       token: getCookie("token")
     }
   });
-}
+} //上传是否签到的状态
 
 export function editData(data) {
-  const { sex, age } = data;
+  const { sex, age, name } = data;
   return request({
     url: MY_EDIT_DATA_URL,
     data: {
       user: {
+        userName: name,
         sex: sex,
         age: age
       }
@@ -59,7 +61,7 @@ export function editData(data) {
   }).then(data => {
     return data;
   });
-}
+} //修改数据信息
 
 export function addPosition(data, token) {
   const { name, phone, province, city, area, positionDetail } = data;
@@ -81,7 +83,7 @@ export function addPosition(data, token) {
   }).then(data => {
     return data;
   });
-}
+} // 添加收货地址
 
 export function getMyPosition(token) {
   return request({
@@ -96,15 +98,49 @@ export function getMyPosition(token) {
   }).then(data => {
     return data.data;
   });
+} //从数据库中获得我已保存的地址
+
+export function deletePosition(data, token) {
+  return request({
+    url: DELETE_POSITION_URL,
+    data: {
+      ids: data
+    },
+    headers: {
+      token: token
+    }
+  }).then(data => {
+    return data;
+  });
+} //删除地址
+
+export function changePosition(data, token) {
+  const { name, phone, province, city, area, positionDetail } = data;
+  return request({
+    url: CHANGE_POSITION_URL,
+    data: {
+      userAddress: {
+        userName: name,
+        phone: phone,
+        proId: province,
+        cityId: city,
+        areaId: area,
+        detailed: positionDetail
+      }
+    },
+    headers: {
+      token: token
+    }
+  }).then(data => data);
 }
 
 export function upLodeImg(data) {
   return request({
     url: UPLOAD_IMG_URL,
     data: {
-      file: data
+      file: data.content
     }
   }).then(data => {
     return data;
   });
-}
+} //上传图片

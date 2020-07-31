@@ -6,12 +6,22 @@
           <use xlink:href="#icon-back"></use>
         </svg>
       </button>
-      <div class="addLocation-topPart-title">新建收货地址</div>
-      <div class="addLocation-topPart-finish" @click="onClickFinish">
+      <div class="addLocation-topPart-title">{{ state }}收货地址</div>
+      <div
+        class="addLocation-topPart-finish"
+        @click="onClickFinish"
+        v-if="state === '新建'"
+      >
         保存
       </div>
+      <div
+        class="addLocation-topPart-finish"
+        @click="onClickFinish"
+        v-if="state === '修改'"
+      >
+        修改
+      </div>
     </div>
-    <div class="div-space"></div>
     <div class="addLocation-contain">
       <van-field v-model="name" label="收货人" placeholder="姓名" />
       <van-field
@@ -58,12 +68,14 @@
 import { getBack } from "../../../../../../components/utils.js";
 import areaList from "../../../../../../assets/position/areaList.js";
 import { getCookie } from "../../../../../../components/cookie.js";
-import { addPosition } from "../../../../../API/my_API.js";
+import { addPosition, changePosition } from "../../../../../API/my_API.js";
+import { Toast } from "vant";
 
 export default {
   name: "addLocation",
   data() {
     return {
+      state: "新建",
       name: "", //用户姓名
       tel: "", //联系电话
       positionDetail: "", //详细地址
@@ -73,7 +85,9 @@ export default {
       isLink: true, //地址选择右侧箭头是否显示
       areaList, //导入的省市区列表
       area: {}, //用户选择的地址
-      positionAll: "" //用户选择后显示的地址
+      positionAll: "", //用户选择后显示的地址
+      id: "", //修改页面需要传入id
+      from: "" //上个页面传进来的值，过渡作用
     };
   },
   methods: {
@@ -82,7 +96,6 @@ export default {
       this.positionShow = true;
     },
     onClickConfirm(val) {
-      console.log(val);
       this.area = val;
       this.positionShow = false;
     },
@@ -96,27 +109,68 @@ export default {
           this.area[0].name + this.area[1].name + this.area[2].name;
         this.isLink = false;
       }
-    },
+    }, //页面显示的地址信息
+
     toggleIt() {
       this.radio = !this.radio;
     },
     onClickFinish() {
-      const data = {
-        name: this.name,
-        phone: this.tel,
-        province: parseInt(this.area[0].code.substring(0, 2)),
-        city: parseInt(this.area[1].code.substring(0, 4)),
-        area: parseInt(this.area[2].code),
-        positionDetail: this.positionDetail
-      };
-      console.log(data);
-      addPosition(data, this.token);
-      // this.$router.push("/myLocation");
+      if (
+        this.name !== "" &&
+        this.tel !== "" &&
+        this.area !== "" &&
+        this.positionDetail !== ""
+      ) {
+        //值都不为空则传入，否则提示
+        const data = {
+          name: this.name,
+          phone: this.tel,
+          province: parseInt(this.area[0].code.substring(0, 2)),
+          city: parseInt(this.area[1].code.substring(0, 4)),
+          area: parseInt(this.area[2].code),
+          positionDetail: this.positionDetail
+        };
+        if (this.state === "新建") {
+          //判断状态为新建还是修改
+          addPosition(data, this.token).then(() => {
+            Toast.success("添加成功");
+            this.$router.push({
+              path: "/myLocation",
+              query: {
+                from: this.from
+              }
+            });
+          });
+        } else {
+          changePosition(data, this.token).then(() => {
+            Toast.success("修改成功");
+            this.$router.push({
+              path: "/myLocation",
+              query: {
+                from: this.from
+              }
+            });
+          });
+        }
+      } else {
+        Toast.fail("请填写全部信息");
+      }
     }
   },
   created() {
     if (getCookie("token") !== "未找到对应cookie")
       this.token = getCookie("token");
+    if (this.$route.query.fun === "change") {
+      this.state = "修改";
+      const data = this.$route.query.data;
+      this.name = data.userName;
+      this.tel = data.phone;
+      this.positionDetail = data.detailed;
+      this.id = data.id;
+    } //如果传入值为change，则将data值传入本地数据中
+    if (this.$route.query.from) {
+      this.from = this.$route.query.data.from;
+    }
   },
   updated() {
     this.showPositionPCA();
@@ -155,6 +209,10 @@ export default {
       width: 0.8rem;
       right: 0;
     }
+  }
+
+  &-contain {
+    margin-top: 0.25rem;
   }
 }
 

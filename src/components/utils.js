@@ -18,7 +18,7 @@ export const debounce = (fn, delay = 300) => {
  * @returns {string}
  */
 export function getImgRightPath(pathW) {
-  return `http://192.168.0.26:8080/image/chenzw_fxsc/${pathW}`;
+  return `http://localhost:8077/testdemo/img${pathW}`;
 }
 
 /**

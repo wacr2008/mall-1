@@ -9,7 +9,6 @@
       <div class="orderDetail-topPart-title">订单详情</div>
     </div>
     <div class="orderDetail-contain">
-      <div class="div-space"></div>
       <div class="orderDetail-contain-state">
         <!-- 物流状态 -->
         <div class="orderDetail-contain-state-text">
@@ -24,7 +23,6 @@
           >
         </div>
       </div>
-      <div class="div-space"></div>
       <div class="orderDetail-contain-receiver">
         <div class="orderDetail-contain-receiver-firstLine">
           <span class="orderDetail-contain-receiver-firstLine-name">
@@ -53,7 +51,6 @@
           :bottomState="bottomState"
         />
       </div>
-      <div class="div-space"></div>
       <div class="orderDetail-contain-feeAndPrice">
         <van-cell-group>
           <van-cell title="运费" v-if="shipFee !== 0">
@@ -69,7 +66,6 @@
           </van-cell>
         </van-cell-group>
       </div>
-      <div class="div-space"></div>
       <div class="orderDetail-contain-orderID">订单编号： {{ orderID }}</div>
     </div>
     <div class="orderDetail-bottomLine">

@@ -135,7 +135,8 @@ export default {
       captcha: "", //验证码
       recommend: "", //邀请码
       ifClick: false, //判断是否可以发送验证码
-      clickMessage: "获取验证码"
+      clickMessage: "获取验证码",
+      captchaSend: ""
     };
   },
   methods: {
@@ -152,23 +153,28 @@ export default {
     }, //登录
 
     onSubmitRegister() {
+      // 点击注册按钮触发
       const accountData = {
         phoneData: this.username,
         passwordData: this.password,
         referralCodeData: this.recommend,
         codeData: this.captcha
       };
-      registerAccount(accountData).then(data => {
-        const { msg } = data;
-        if (msg !== "注册成功") {
-          Toast.fail(msg);
-        } else {
-          Toast.success("注册成功,2s后自动登录");
-          setTimeout(() => {
-            this.onSubmitLogIn();
-          }, 2000);
-        }
-      });
+      if (this.captchaSend !== this.captcha) {
+        Toast.fail("验证码错误！"); //验证码判断
+      } else {
+        registerAccount(accountData).then(data => {
+          const { msg } = data;
+          if (msg !== "注册成功") {
+            Toast.fail(msg);
+          } else {
+            Toast.success("注册成功,2s后自动登录");
+            setTimeout(() => {
+              this.onSubmitLogIn();
+            }, 2000); //延时两秒后自动跳转
+          }
+        });
+      }
     }, //注册
 
     onClickForgetPW() {

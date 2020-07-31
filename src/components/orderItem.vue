@@ -1,6 +1,21 @@
+<!--
+需要传入的值：
+  shopping: {
+    goodsName, //商品名称
+    img, //商品图片
+    goodsAttr, //商品参数名
+    goodsAttrVal, //商品具体参数
+    color, //剩余参数,可按照实际情况修改,默认传颜色
+    price, //价格
+    num, //数量
+    message, //留言 (可为空)
+  } 商品具体参数
+  topState: string , // 可选值：1,2,3,4,0,5 传入为字符串型数字，否则会出现无法选中的状态，与'vant'组件类型有关
+  1:待支付  2:待发货  3:待收货  4:待评价 0:不显示 5:显示留言
+  bottomState: string, //与上相同，一般传入值与topState相同，但为了让一些只出现上部或者下部的也可使用，故分开
+-->
 <template>
   <div class="order-item">
-    <div class="div-space"></div>
     <div class="order-item-title" @click="onClickOrderDetail">
       <div class="order-item-title-name">
         {{ shopping.goodsName }}
@@ -43,6 +58,15 @@
         </div>
       </div>
     </div>
+    <div class="order-item-contain-message" v-if="topState === '5'">
+      留言：
+      <span class="order-item-contain-message-zero" v-if="!shopping.message">
+        无留言
+      </span>
+      <span class="order-item-contain-message-text" v-if="shopping.message">
+        {{ shopping.message }}
+      </span>
+    </div>
     <div class="order-item-contain-total">
       <div class="order-item-contain-total-num">
         共 {{ shopping.num }} 件商品
@@ -51,7 +75,10 @@
         合计： ￥{{ shopping.price * shopping.num }}
       </div>
     </div>
-    <div class="order-item-contain-buttons" v-if="topState !== '0'">
+    <div
+      class="order-item-contain-buttons"
+      v-if="topState !== '0' && topState !== '5'"
+    >
       <div
         class="order-item-contain-buttons-define"
         v-if="bottomState === '1'"
@@ -142,19 +169,19 @@ export default {
       Toast("提醒已发送给卖家");
     },
     onClickFindWay() {
-      console.log("查看物流");
+      Toast.success("查看物流");
     },
     onClickCheckGet() {
-      console.log("确认收货");
+      Toast.success("确认收货");
     },
     onClickRecommend() {
-      console.log("评价");
+      Toast.success("评价");
     },
     onClickCancel() {
       this.show = false;
     },
     onClickOrderDetail() {
-      if (this.topState !== "0") {
+      if (this.topState !== "0" && this.topState !== "5") {
         this.$router.push({
           path: "/orderDetail",
           query: {
@@ -171,6 +198,7 @@ export default {
 .order-item {
   width: 100%;
   background-color: #fff;
+  margin-top: 0.25rem;
 
   &-title {
     height: 0.8rem;
@@ -247,7 +275,8 @@ export default {
       }
     }
 
-    &-total {
+    &-total,
+    &-message {
       padding: 0.1rem 0;
       display: flex;
       justify-content: flex-end;
@@ -258,6 +287,15 @@ export default {
       &-num,
       &-price {
         margin-right: 0.3rem;
+      }
+    }
+
+    &-message {
+      justify-content: flex-start;
+      padding-left: 0.3rem;
+
+      &-zero {
+        color: #b9b9b9;
       }
     }
 

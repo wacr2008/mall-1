@@ -22,7 +22,6 @@ export function getShoppingSku(id) {
       limit: 10
     }
   }).then(data => {
-    console.log(data);
     return data.data.data;
   });
 }

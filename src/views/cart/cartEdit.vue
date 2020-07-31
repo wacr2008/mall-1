@@ -10,18 +10,22 @@
         <span>购物车</span>
         <span v-if="num !== 0">({{ num }})</span>
       </div>
-      <div class="cartEdit-header-edit" @click="onClickFinish">
+      <div
+        class="cartEdit-header-edit"
+        @click="onClickFinish"
+        v-show="ifFinishClick"
+      >
         完成
       </div>
     </header>
     <div class="cartEdit-contain">
-      <div class="cart-contain-empty" v-if="num === 0">
-        <div class="cart-contain-empty-img">
+      <div class="cartEdit-contain-empty" v-if="num === 0">
+        <div class="cartEdit-contain-empty-img">
           <img :src="require('../../assets/img/cart/EmptyCart.png')" />
         </div>
         <div
-          class="cart-contain-empty-text"
-          v-if="tokenGet !== '未找到对应cookie'"
+          class="cartEdit-contain-empty-text"
+          v-if="token !== '未找到对应cookie'"
         >
           购物车还是空的
         </div>
@@ -33,7 +37,6 @@
           :key="index"
           v-show="shopping[index].num !== 0"
         >
-          <div class="div-space"></div>
           <div class="cartEdit-item-title">
             <van-checkbox :name="index">
               <template #icon="props">
@@ -84,20 +87,34 @@
       <van-checkbox v-model="choose" @click="fromCheckAll" ref="judge">
         全选
       </van-checkbox>
-      <div class="cartEdit-total-collect">
-        <van-button type="default">收藏</van-button>
-      </div>
       <div class="cartEdit-total-remove">
-        <van-button type="danger" @click="onClickDelete">删除</van-button>
+        <van-button type="danger" @click="onClickCancel">删除</van-button>
       </div>
     </div>
+    <van-overlay :show="show" @click="show = false">
+      <div class="wrapper" @click.stop>
+        <!--遮罩层-->
+        <div class="block">
+          <div class="block-title">
+            提示
+          </div>
+          <div class="block-contain">
+            确定要删除商品吗？
+          </div>
+          <div class="block-button">
+            <button class="check" @click="onClickDelete">确认</button>
+            <button @click="onClickCancel">取消</button>
+          </div>
+        </div>
+      </div>
+    </van-overlay>
   </div>
 </template>
 
 <script>
 import { checkAll, checkTrueAll } from "../../components/checkRound.js";
 import { getBack } from "../../components/utils.js";
-import {modifyShoppingMessage, removeShoppingFromCart} from "../API/cart_API";
+import { modifyShoppingMessage, removeShoppingFromCart } from "../API/cart_API";
 import { getCookie } from "../../components/cookie.js";
 
 export default {
@@ -113,7 +130,9 @@ export default {
       allButton: false,
       shoppingImg: {},
       shopping: [],
-      shopping_step_num: [] //需要将步进器的值单独绑定出来，否则num设为0，步进器会默认先设置成1
+      shopping_step_num: [], //需要将步进器的值单独绑定出来，否则num设为0，步进器会默认先设置成1
+      ifFinishClick: false, //是否显示完成按钮
+      show: false //删除按钮确认框
     };
   },
   methods: {
@@ -127,8 +146,6 @@ export default {
           ).then(() => {
             this.$router.push("/cart");
           });
-        } else {
-          this.$router.push("/cart");
         }
       });
     },
@@ -145,13 +162,16 @@ export default {
 
     onClickDelete() {
       this.checked.forEach(e => {
-        removeShoppingFromCart(this.shopping[e].id, this.token).then(data =>
-          console.log(data)
-        );
+        removeShoppingFromCart(this.shopping[e].id, this.token);
         this.shopping[e].num = 0;
         this.num--;
+        this.show = !this.show;
       }); //删除选择的商品
-    }
+    },
+
+    onClickCancel() {
+      this.show = !this.show;
+    } //判断弹出框是否显示
   },
   created() {
     this.shopping = this.$route.query.shopping;
@@ -160,12 +180,15 @@ export default {
     this.shopping.forEach((e, i) => {
       this.shopping_step_num[i] = e.num;
     });
-    if (getCookie("token") !== "未找到对应cookie") {
-      this.token = getCookie("token");
-    }
+    this.token = getCookie("token");
   },
   updated() {
     this.fromCheckTrueAll();
+    this.shopping.forEach((e, i) => {
+      if (e.num !== 0 && e.num !== this.shopping_step_num[i]) {
+        this.ifFinishClick = true;
+      }
+    });
   }
 };
 </script>

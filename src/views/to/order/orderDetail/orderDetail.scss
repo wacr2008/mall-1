@@ -36,6 +36,7 @@
       display: flex;
       align-items: center;
       word-break: break-all;
+      margin-top: 0.25rem;
 
       &-text {
         margin: 0.2rem 0 0.2rem 0.2rem;
@@ -50,6 +51,7 @@
       width: 100%;
       background-color: #fff;
       padding: 0.2rem 0.3rem;
+      margin-top: 0.25rem;
 
       &-firstLine {
         margin-left: 0.4rem;
@@ -82,12 +84,17 @@
     }
 
     &-orderID {
+      margin-top: 0.25rem;
       height: 0.7rem;
       background-color: #fff;
       font-size: initial;
       line-height: 0.7rem;
       padding: 0 0.3rem;
       color: #999999;
+    }
+
+    &-feeAndPrice {
+      margin-top: 0.25rem;
     }
   }
   &-bottomLine {

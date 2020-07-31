@@ -25,7 +25,6 @@
         </div>
       </van-tab>
     </van-tabs>
-    <div class="div-space"></div>
   </div>
 </template>
 

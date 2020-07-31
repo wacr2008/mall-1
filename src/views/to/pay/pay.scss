@@ -1,0 +1,98 @@
+.pay {
+  height: 100%;
+  background-color: #f1f1f1;
+  position: relative;
+
+  header {
+    width: 100%;
+    height: 1rem;
+    background-color: #fff;
+    display: flex;
+    font-size: initial;
+    align-items: center;
+    position: relative;
+
+    .pay-header-back {
+      position: absolute;
+      height: 0.5rem;
+      width: 0.5rem;
+      margin-left: 0.2rem;
+    }
+
+    .pay-header-title {
+      margin: auto;
+    }
+  }
+
+  .receiver {
+    background-color: #fff;
+    margin-top: 0.25rem;
+    padding: 0.2rem;
+
+    &-firstLine {
+      font-size: initial;
+
+      &-name {
+        margin: 0 0.5rem 0 0;
+      }
+    }
+    &-position {
+      color:#919191;
+      margin-top: 0.1rem;
+    }
+  }
+
+  .otherMessage{
+    margin-top: 0.25rem;
+    background-color: #fff;
+    font-size: initial;
+    padding: 0.2rem;
+
+    &-firstLine {
+      display: flex;
+      padding-bottom: 0.15rem;
+
+      &-contain {
+        margin-left: auto;
+      }
+    }
+
+    &-secondLine{
+      padding-top: 0.15rem;
+      border-top: 1px solid #F0F0F0;
+    }
+  }
+
+  .bottomLine {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    padding: 0 0 0 0.2rem;
+    background-color: #fff;
+    width: 100%;
+    align-items: center;
+
+    &-leftPart{
+      &-firstLine{
+        font-size: initial;
+
+        span {
+          color: #D10D0E;
+        }
+      }
+
+      &-secondLine {
+        color: #959595;
+      }
+    }
+
+    &-rightBtn{
+      margin-left: auto;
+
+      .van-button{
+        width: 2rem;
+      }
+    }
+  }
+}

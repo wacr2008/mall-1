@@ -58,14 +58,13 @@ export default {
       } else {
         Toast.success("修改成功");
         this.changeMessage();
-        this.$router.push({
-          path: "/cart"
-        });
       }
     },
     changeMessage() {
       editMessage({ goodsId: this.id, bbs: this.message }, this.token).then(
-        data => data
+        () => {
+          this.$router.push("/cart");
+        }
       );
     }
   },

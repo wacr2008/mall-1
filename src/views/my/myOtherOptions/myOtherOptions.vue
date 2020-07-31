@@ -15,22 +15,22 @@
       :icon="require('../../../assets/img/my/myOtherOptions/card.png')"
       is-link
     />
-    <div class="div-space"></div>
     <van-cell
       value="我的评价"
       :icon="require('../../../assets/img/my/myOtherOptions/evaluation.png')"
       is-link
+      class="myEvaluation"
     />
     <van-cell
       value="维权退款"
       :icon="require('../../../assets/img/my/myOtherOptions/refund.png')"
       is-link
     />
-    <div class="div-space"></div>
     <van-cell
       value="我的预约体验"
       :icon="require('../../../assets/img/my/myOtherOptions/experience.png')"
       is-link
+      class="myReservation"
     />
     <van-cell
       value="我的预约设计"
@@ -46,4 +46,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.myEvaluation, .myReservation {
+  margin-top: 0.25rem;
+}
+</style>

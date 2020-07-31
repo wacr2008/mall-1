@@ -45,6 +45,7 @@
 <script>
 import { getBack } from "../../../components/utils.js";
 import { onCaptchaClick } from "../../../components/onCaptchaClick.js";
+import { Toast } from "vant";
 
 export default {
   name: "forgetPassword",
@@ -53,15 +54,26 @@ export default {
       tel: "",
       captcha: "",
       ifClick: false,
-      clickMessage: "获取验证码"
+      clickMessage: "获取验证码",
+      captchaSend: ""
     };
   },
   methods: {
     getBack,
     onCaptchaClick,
     onClickNext() {
-      console.log("next");
-      this.$router.push("/resetPassword");
+      if (this.captchaSend !== this.captcha) {
+        Toast.fail("验证码错误！"); //验证码判断
+      } else if (this.captcha === "") {
+        Toast.fail("请输入验证码");
+      } else {
+        this.$router.push({
+          path: "/resetPassword",
+          query: {
+            phone: this.tel
+          }
+        });
+      }
     }
   }
 };

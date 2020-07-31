@@ -35,20 +35,22 @@
 <script>
 import { getBack } from "../../../components/utils.js";
 import { Toast } from "vant";
+import { resetPassword } from "../../API/signIn_API.js";
 
 export default {
   name: "resetPassword",
   data() {
     return {
-      password: "",
-      passwordAg: ""
+      phone: "", //需要修改密码的手机号
+      password: "", //密码
+      passwordAg: "" //第二次输入密码
     };
   },
   methods: {
     getBack,
     judgeEq() {
       return this.passwordAg === this.password;
-    },
+    }, //比较两次输入密码是否相同
     onClickFinish() {
       if (!this.password) {
         Toast.fail("请输入密码");
@@ -56,11 +58,17 @@ export default {
         if (!this.judgeEq()) {
           Toast.fail("密码不一致");
         } else {
-          Toast.success("修改成功");
-          this.$router.push("/signIn");
+          resetPassword(this.phone, this.password).then(() => {
+            Toast.success("修改成功");
+            this.$router.push("/signIn");
+          }); //传入手机号与修改的密码
         }
       }
     }
+  },
+  created() {
+    this.phone = this.$route.query.phone;
+    console.log(this.phone);
   }
 };
 </script>

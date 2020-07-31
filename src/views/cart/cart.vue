@@ -1,11 +1,6 @@
 <template>
   <div class="cart">
     <header>
-      <button class="cart-header-back" @click="getBack">
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#icon-back"></use>
-        </svg>
-      </button>
       <div class="cart-header-title">
         购物车
         <span v-if="num !== 0">({{ num }})</span>
@@ -35,7 +30,6 @@
       </div>
       <van-checkbox-group v-model="checked" ref="checkboxGroup">
         <div class="cart-item" v-for="(x, index) in shopping" :key="index">
-          <div class="div-space"></div>
           <div class="cart-item-title">
             <van-checkbox :name="index" @click="getTotalPrice">
               <template #icon="props">
@@ -121,7 +115,7 @@
         </span>
         <span class="cart-total-priceAll-price"> ￥{{ priceAll }} </span>
       </div>
-      <van-button type="danger">去结算</van-button>
+      <van-button type="danger" @click="onClickPay">去结算</van-button>
     </div>
   </div>
 </template>
@@ -130,8 +124,9 @@
 import { checkAll, checkTrueAll } from "../../components/checkRound.js";
 import { getCartData } from "../API/cart_API.js";
 import { getAllShoppingData } from "../API/all_shopping_API.js";
-import { getImgRightPath, getBack } from "../../components/utils.js";
+import { getImgRightPath } from "../../components/utils.js";
 import { getCookie } from "../../components/cookie.js";
+import { Toast } from "vant";
 
 export default {
   name: "cart",
@@ -143,23 +138,12 @@ export default {
       choose: false,
       activeIcon: "#icon-yuan",
       inactiveIcon: "#icon-yuancircle46",
-      priceAll: 0,
-      allButton: false,
-      indexTrans: 0,
-      shoppingImg: {},
-      shopping: [],
-      tokenGet: ""
+      priceAll: 0, //总价
+      allButton: false, //底部全选图标
+      shoppingImg: {}, //商品对应的图片
+      shopping: [], //商品信息
+      tokenGet: "" //获取到的token
     };
-  },
-  created() {
-    this.getData();
-  },
-  updated() {
-    if (!this.judge) {
-      this.judge = true;
-      this.getImg();
-    }
-    this.fromCheckTrueAll();
   },
   methods: {
     fromCheckAll() {
@@ -223,8 +207,6 @@ export default {
       });
     }, //跳转留言页面
 
-    getBack, //回退按钮
-
     getData() {
       this.tokenGet = getCookie("token");
       if (this.tokenGet !== "未找到对应cookie") {
@@ -234,8 +216,6 @@ export default {
               this.shopping.push(e);
               this.num++;
             });
-          } else {
-            console.log("无数据");
           }
         });
       } // 获取后端数据并存入本地
@@ -250,9 +230,32 @@ export default {
         });
       });
     }, // 从另一个接口获得图片URL并存入本地
+
     onClickLogIn() {
       this.$router.push("/signIn");
+    }, // 跳转到登录页面
+
+    onClickPay() {
+      if (this.tokenGet === "未找到对应cookie") {
+        Toast.fail("请先登录"); //先判断是否登录
+      } else {
+        if (this.checked.length !== 0) {
+          this.$router.push("pay");
+        } else {
+          Toast.fail("您尚未选择任何商品");
+        }
+      }
+    } //跳转到支付界面
+  },
+  created() {
+    this.getData();
+  },
+  updated() {
+    if (!this.judge) {
+      this.judge = true;
+      this.getImg();
     }
+    this.fromCheckTrueAll();
   }
 };
 </script>

@@ -31,7 +31,6 @@
         </van-button>
       </div>
     </div>
-    <div class="div-space"></div>
   </div>
 </template>
 

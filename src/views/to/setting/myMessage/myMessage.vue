@@ -1,7 +1,7 @@
 <template>
   <div class="myMessage">
     <div class="myMessage-topPart">
-      <button class="myMessage-topPart-back" @click="getBack">
+      <button class="myMessage-topPart-back" @click="getBackTo">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-back"></use>
         </svg>
@@ -27,10 +27,8 @@
           @click="onClick('age')"
         />
       </van-cell-group>
-      <div class="div-space"></div>
-      <van-cell-group>
+      <van-cell-group class="myMessage-otherIFM-secondePart">
         <van-cell title="地址" is-link @click="onClickMyLocation" />
-        <van-cell title="实名认证" is-link />
       </van-cell-group>
       <van-overlay :show="item.sex.show_sex">
         <div class="overlay" @click.stop>
@@ -105,7 +103,6 @@
 </template>
 
 <script>
-import { getBack } from "../../../../components/utils.js";
 import { getCookie } from "../../../../components/cookie.js";
 import { getMyData, editData, upLodeImg } from "../../../API/my_API.js";
 
@@ -137,7 +134,10 @@ export default {
     };
   },
   methods: {
-    getBack,
+    getBackTo() {
+      this.$router.push("/my");
+    },
+
     getCookie,
     judgeIFM() {
       if (!this.userData.userName) {

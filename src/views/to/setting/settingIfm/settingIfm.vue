@@ -1,7 +1,6 @@
 <template>
   <div class="settingIfm">
-    <div class="div-space"></div>
-    <van-cell-group>
+    <van-cell-group class="settingIfm-item">
       <van-cell title="关于我们" is-link @click="onClickAboutUs" />
       <van-cell title="意见反馈" is-link @click="onClickFeedBack" />
       <van-cell title="在线客服" is-link />
@@ -77,5 +76,9 @@ export default {
   width: 100%;
   margin-top: 0.6rem;
   color: #db4546;
+}
+
+.settingIfm-item {
+  margin-top: 0.25rem;
 }
 </style>

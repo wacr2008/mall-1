@@ -23,7 +23,6 @@
         </van-grid-item>
       </van-grid>
     </div>
-    <div class="div-space"></div>
   </div>
 </template>
 
@@ -62,16 +61,21 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.designer-contain {
-  &-img {
-    height: 1.3rem;
-    width: 1.3rem;
+.designer {
+  margin-bottom: 0.25rem;
 
-    img {
-      height: 100%;
-      width: 100%;
-      object-fit: contain;
+  .designer-contain {
+    &-img {
+      height: 1.3rem;
+      width: 1.3rem;
+
+      img {
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+      }
     }
   }
-}
+}  
+
 </style>

@@ -52,25 +52,25 @@ export default {
   },
   methods: {
     getDataSe() {
-      getSortDataSecond(this.uid)
-        .then(data => {
-          if (data !== undefined) {
-            data.forEach(e => {
-              this.sportItemName.push(e.secondListName);
-              this.sportItemId.push(e.id);
-            });
-            this.getDataThird();
-          }
-        })
-        .catch(() => {});
+      getSortDataSecond(this.uid).then(data => {
+        if (data !== undefined) {
+          data.forEach(e => {
+            this.sportItemName.push(e.secondListName);
+            this.sportItemId.push(e.id);
+          });
+          this.getDataThird();
+        }
+      });
     }, //获取二级菜单数据
     getDataThird() {
       //获取三级菜单数据
       let i = 0;
       this.sportItemId.forEach(e => {
+        //将sportItemId传入请求，获取三级菜单数据
         getSortDataThird(e).then(data => {
           const goods = data.data.goods;
           if (goods) {
+            //如果列表中有商品信息存在，则将商品信息传入
             goods.forEach(e => {
               let thirdListItem = {};
               thirdListItem.name = e.goodsName;

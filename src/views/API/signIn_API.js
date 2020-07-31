@@ -1,5 +1,5 @@
 import request from "./vender/request.js";
-import { SING_IN_URL, REGISTER_URL, SENDSMS_URL } from "./URLs.js";
+import { SING_IN_URL, REGISTER_URL, SENDSMS_URL, RESET_URL } from "./URLs.js";
 
 export function signInJudge(phone, password) {
   return request({
@@ -41,5 +41,18 @@ export function sendSMS(data) {
     }
   }).then(data => {
     return data.data;
+  });
+}
+
+export function resetPassword(phone, data) {
+  return request({
+    url: RESET_URL,
+    data: {
+      user: {
+        phone: phone,
+        password: data
+      },
+      code: "123123"
+    }
   });
 }

@@ -18,11 +18,12 @@ export default (options) => {
         resolve(res);
         if (status == 200 && code == 0) {
           resolve(res);
-        } else if(status==200 && code == 200){
-          console.log("查询失败");
-        } else {
-          console.log("无此数据");
         }
+        // else if (status==200 && code == 200){
+        //   console.log("查询失败");
+        // } else {
+        //   console.log("无此数据");
+        // }
       })
       .catch(err => {
         reject(err);

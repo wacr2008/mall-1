@@ -28,6 +28,7 @@
           class="shopping-search-others-contain-item"
           v-for="name in searchOthers"
           :key="name"
+          @click="onClickValue(name)"
         >
           {{ name }}
         </div>
@@ -43,6 +44,7 @@
           class="shopping-search-history-contain-item van-hairline--top"
           v-for="historyName in searchHistory"
           :key="historyName"
+          @click="onClickValue(historyName)"
         >
           <div class="shopping-search-history-contain-item-clock">
             <img
@@ -77,6 +79,11 @@ export default {
       ],
       searchHistory: ["原木茶几", "北欧风格两用沙发床"]
     };
+  },
+  methods: {
+    onClickValue(name) {
+      this.value = name;
+    }
   }
 };
 </script>

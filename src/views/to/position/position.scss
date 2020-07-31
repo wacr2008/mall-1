@@ -8,6 +8,7 @@
     align-items: center;
     margin-bottom: 0.1rem;
     margin-top: 0.1rem;
+    position: relative;
 
     &-back{
       height:0.8rem;
@@ -33,6 +34,25 @@
 
       .van-search__action{
         margin-left:0.1rem;
+      }
+    }
+
+    .downShow{
+      position: absolute; //相对于头部导航栏做绝对定位
+      top: 0.75rem;
+      left: 0.9rem;
+      width: calc(100% - 2.1rem);
+      z-index: 999;
+      background-color: #fff;
+      max-height: 3rem; //设置最大高度
+      font-size: initial;
+      border-left: 1px solid #ECECEC;
+      border-bottom: 1px solid #ECECEC;
+      border-right: 1px solid #ECECEC;
+      overflow-y: auto;
+
+      &-item {
+        padding: 0.1rem;
       }
     }
   }

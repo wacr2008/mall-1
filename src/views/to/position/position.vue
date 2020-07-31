@@ -8,15 +8,27 @@
       </van-button>
       <van-search
         v-model="value"
-        placeholder="请输入城市/拼音"
+        placeholder="请输入城市名"
         class="position-header-search"
         left-icon=""
         show-action
+        @input="searchPo"
+        @focus="downShow"
       >
         <template #action>
-          <div>搜索</div>
+          <div @click="onClickCheck">确定</div>
         </template>
       </van-search>
+      <div class="downShow" v-show="show">
+        <div
+          class="downShow-item"
+          v-for="item in citySearch"
+          :key="item"
+          @click="placeItemClick(item)"
+        >
+          {{ item }}
+        </div>
+      </div>
     </header>
     <div class="position-now  van-hairline--bottom  van-hairline--top">
       当前定位：{{ nowCity }}
@@ -55,7 +67,7 @@
 </template>
 
 <script>
-import { getPosition } from "../../API/home_API.js";
+import { getPosition, searchPosition } from "../../API/home_API.js";
 
 export default {
   data() {
@@ -76,7 +88,9 @@ export default {
         "厦门市",
         "重庆市",
         "长沙市"
-      ]
+      ],
+      show: false,
+      citySearch: []
     };
   },
   methods: {
@@ -97,8 +111,34 @@ export default {
         this.nowCity = e.target.textContent;
       }
     },
-    onClickSearch() {
-
+    searchPo(e) {
+      this.citySearch = [];
+      if (e !== "") {
+        searchPosition(e).then(data => {
+          const getData = data.data.data;
+          getData.forEach(e => {
+            this.citySearch.push(e.name);
+          });
+        });
+      } else {
+        this.citySearch.push("无数据");
+      }
+    },
+    downShow() {
+      this.show = true;
+    }, //输入框获得焦点时弹出下拉框
+    onClickCheck() {
+      this.$router.push({
+        path: "/home",
+        query: {
+          place: this.nowCity
+        }
+      });
+    },
+    placeItemClick(name) {
+      this.value = name;
+      this.nowCity = name;
+      this.show = false;
     }
   },
   created() {
